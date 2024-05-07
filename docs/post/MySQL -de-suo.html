@@ -65,7 +65,22 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><p>如果在线上系统中，在高并发的访问之下，出现了 死锁问题 或者 等待锁时间过长导致超时，那么碰到这些情况，就可能问你锁相关的问题</p></div>
+<div class="markdown-body" id="postBody"><p>线上系统中，在高并发的访问之下，出现了 死锁问题 或者 等待锁时间过长导致超时，那么碰到这些情况，就可能问你锁相关的问题<br>
+首先还是先给锁分类，之后再来逐个了解：<br>
+按照功能划分：</p>
+<p>共享锁：也叫 S 锁 或 读锁，是共享的，不互斥<br>
+加锁方式：select ... lock in share mode<br>
+排他锁：也叫 X 锁 或 写锁，写锁阻塞其他锁<br>
+加锁方式：select ... for update<br>
+按照锁的粒度划分：</p>
+<p>全局锁：锁整个数据库<br>
+表级锁：锁整个表<br>
+行级锁：锁一行记录的索引<br>
+记录锁：锁定索引的一条记录<br>
+间隙锁：锁定一个索引区间<br>
+临键锁：记录锁和间隙锁的结合，解决幻读问题<br>
+插入意向锁：执行 insert 时添加的行记录 id 的锁<br>
+意向锁：存储引擎级别的“表级锁”</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
 <div class="comments" id="comments"></div>
