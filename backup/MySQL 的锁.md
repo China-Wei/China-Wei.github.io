@@ -37,3 +37,19 @@ unlock tables;
 - 当对表做 结构变更 时，会自动添加元数据写锁
 
 - 自增锁：是一种特殊的表级锁，自增列事务执行插入操作时产生
+查看表级锁的命令：
+
+```
+-- 查看表锁定状态
+show status like 'table_locks%';
+-- 添加表读锁
+lock table user read;
+-- 添加表写锁
+lock table user write;
+-- 查看表锁情况
+show open tables;
+-- 删除表锁
+unlock tables;
+```
+
+![image](https://github.com/China-Wei/China-Wei.github.io/assets/52816610/306ad97d-9743-4e62-8eb9-1ede2bd8ff7d)
