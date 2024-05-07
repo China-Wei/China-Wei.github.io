@@ -85,8 +85,13 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <li>插入意向锁：执行 insert 时添加的行记录 id 的锁</li>
 <li>意向锁：存储引擎级别的“表级锁”</li>
 </ul>
-<p>相关命令：<br>
-<code class="notranslate">-- 加锁 flush tables with read lock; -- 释放锁 unlock tables;</code></p>
+<p>相关命令：</p>
+<pre class="notranslate"><code class="notranslate">-- 加锁
+flush tables with read lock;
+
+-- 释放锁
+unlock tables;
+</code></pre>
 <p>表级锁:<br>
 表级锁中又分为以下几种：</p>
 <ul>

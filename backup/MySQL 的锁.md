@@ -19,10 +19,13 @@
 - 意向锁：存储引擎级别的“表级锁”
 
 相关命令：
-`-- 加锁
+```
+-- 加锁
 flush tables with read lock;
+
 -- 释放锁
-unlock tables;`
+unlock tables;
+```
 
 表级锁:
 表级锁中又分为以下几种：
