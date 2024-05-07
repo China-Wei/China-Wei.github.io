@@ -69,3 +69,30 @@ MySQL 的行级锁是由存储引擎是实现的，InnoDB 的行锁就是通过�
 > 对于 update、insert 语句，InnoDB 会自动添加写锁（具体添加哪一种锁会根据 where 条件判断，后边会提到 加锁规则）
 > 对于 select 不会添加锁
 > 事务手动给 select 记录集添加读锁或写锁
+
+接下来对记录锁、间隙锁、临键锁、插入意向锁来一个一个解释，这几个锁还是比较重要的，一定要学习！
+
+> 记录锁：
+记录锁：锁的是一行索引，而不是记录
+
+那么可能有人会有疑问了，如果这一行数据上没有索引怎么办呢？
+
+其实如果一行数据没有索引，InnoDB 会自动创建一个隐藏列 ROWID 的聚簇索引，因此每一行记录是一定有一个索引的
+
+下边给出记录锁的一些命令:
+-- 加记录读锁
+```
+select * from user where id = 1 lock in share mode;
+-- 加记录写锁
+select * from user where id = 1 for update;
+-- 新增、修改、删除会自动添加记录写锁
+insert into user values (1, "lisi");
+update user set name = "zhangsan" where id = 1;
+delete from user where id = 1;
+```
+
+> 间隙锁
+间隙锁用于锁定一个索引区间，开区间，不包括两边端点，用于在索引记录的间隙中加锁，不包括索引记录本身
+
+间隙锁的作用是 **防止幻读**，保证索引记录的间隙不会被插入数据
+间隙锁在 **可重复读** 隔离级别下才会生效
