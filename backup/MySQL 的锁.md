@@ -53,3 +53,19 @@ unlock tables;
 ```
 
 ![image](https://github.com/China-Wei/China-Wei.github.io/assets/52816610/306ad97d-9743-4e62-8eb9-1ede2bd8ff7d)
+
+**行级锁**
+
+MySQL 的行级锁是由存储引擎是实现的，InnoDB 的行锁就是通过给 索引加锁 来实现
+
+注意：InnoDB 的行锁是针对索引加的锁，不是针对记录加的锁。并且该索引不能失效，否则会从行锁升级为表锁
+
+行锁根据 范围 分为：记录锁（Record Locks）、间隙锁（Gap Locks）、临键锁（Next-Key Locks）、插入意向锁（Insert Intention Locks）
+
+行锁根据 功能 分为：读锁和写锁
+
+**什么时候会添加行锁呢？**
+
+> 对于 update、insert 语句，InnoDB 会自动添加写锁（具体添加哪一种锁会根据 where 条件判断，后边会提到 加锁规则）
+> 对于 select 不会添加锁
+> 事务手动给 select 记录集添加读锁或写锁
