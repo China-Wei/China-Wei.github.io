@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="//cdn.staticfile.net/Primer/21.0.7/primer.css" rel="stylesheet" />
+    <link rel="icon" href="http://meekdai.com/favicon.ico"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="**目录**
+
+一、String
+
+1.Java中的数据类型
+
+2.字符串概述
+
+3.字符串构造方法
+
+4.字符串构造内存原理
+
+5.字符串比较
+
+6.字符串常见方法
+
+二、StringBuilder
+
+1.定义
+
+2.常用方法
+
+3.StringBuilder内存分析
+
+三、StringJoiner
+
+1.定义
+
+2.常用方法
+
+* * *
+
+##  一、String
+
+### 1.Java中的数据类型
+
+> 在Java中数据类型被分为**基本数据类型** 和**引用数据类型** 。">
+<meta property="og:title" content="第二讲字符串相关类">
+<meta property="og:description" content="**目录**
+
+一、String
+
+1.Java中的数据类型
+
+2.字符串概述
+
+3.字符串构造方法
+
+4.字符串构造内存原理
+
+5.字符串比较
+
+6.字符串常见方法
+
+二、StringBuilder
+
+1.定义
+
+2.常用方法
+
+3.StringBuilder内存分析
+
+三、StringJoiner
+
+1.定义
+
+2.常用方法
+
+* * *
+
+##  一、String
+
+### 1.Java中的数据类型
+
+> 在Java中数据类型被分为**基本数据类型** 和**引用数据类型** 。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://blog.meekdai.com/post/di-er-jiang-zi-fu-chuan-xiang-guan-lei.html">
+<meta property="og:image" content="https://meekdai.com/avatar.svg">
+<title>第二讲字符串相关类</title>
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">第二讲字符串相关类</h1>
+<div class="title-right">
+    <a href="http://blog.meekdai.com" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/China-Wei/China-Wei.github.io/issues/6" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p><strong>目录</strong></p>
+<p>一、String</p>
+<p>1.Java中的数据类型</p>
+<p>2.字符串概述</p>
+<p>3.字符串构造方法</p>
+<p>4.字符串构造内存原理</p>
+<p>5.字符串比较</p>
+<p>6.字符串常见方法</p>
+<p>二、StringBuilder</p>
+<p>1.定义</p>
+<p>2.常用方法</p>
+<p>3.StringBuilder内存分析</p>
+<p>三、StringJoiner</p>
+<p>1.定义</p>
+<p>2.常用方法</p>
+<hr>
+<h2>一、String</h2>
+<h3>1.Java中的数据类型</h3>
+<blockquote>
+<p>在Java中数据类型被分为<strong>基本数据类型</strong> 和<strong>引用数据类型</strong> 。</p>
+<ul>
+<li>基本数据类型：数值存储在自己的空间而不是堆内存或其他的空间中，如int、float、double、boolean等</li>
+<li>引用数据类型：数值存储在其他的空间，本身的空间存储的是地址值，如数组、创建的对象、字符串等。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>在本节中，我们将介绍的字符串就是一种引用数据类型。</strong></p>
+</blockquote>
+<h3>2.字符串概述</h3>
+<blockquote>
+<p><strong>a.</strong> 在Java中所有字符串的定义都在<strong>java.lang.String</strong> 中，在使用String定义字符串时应先导包。 ****</p>
+<pre class="notranslate"><code class="notranslate">//导包
+java.lang.String;
+
+//定义
+String s = "abcdef";
+</code></pre>
+<hr>
+<p>******b. 字符串参与的所有运算都属于字符串的拼接操作。**由于字符串的内容自创建之后就不能改变，所以每次执行字符串的拼接操作时都会在内存中重新申请空间储存拼接后的字符串。</p>
+<pre class="notranslate"><code class="notranslate">String s1 = "abc";
+String s2 = "123";
+System.out.println(s1+s2);//执行结果：abc123
+</code></pre>
+<p>在执行上面的代码时一共产生了三个字符串，分别是s1("abc")、s2("123")以及拼接后新产生的字符串"abc123"。</p>
+<hr>
+<pre class="notranslate"><code class="notranslate">String s1 = "abc";
+s1="三连+关注";
+System.out.println(s1);//执行结果：三连+关注
+</code></pre>
+<p><strong>c.</strong> 字符串的值被创建后是无法改变的，因此在执行上面的代码时并没有改变"abc"里原本的内容，而是创建了一个新的字符串"三连+关注"并重新赋值给了s1。</p>
+<hr>
+<p><strong>d.</strong> 对于没有变量参与的字符串拼接操作是不同于有变量参与的拼接操作的。</p>
+<ul>
+<li>如果没有变量参与，系统会检查串池，如果串池中有该字符串，直接复用，没有再开辟新的内存空间。</li>
+<li>如果有变量参与，每一行代码都会创建新的字符串。</li>
+</ul>
+</blockquote>
+<h3>3.字符串构造方法</h3>
+<blockquote>
+<p><strong>a.</strong> 直接定义</p>
+<pre class="notranslate"><code class="notranslate">String s1 = "abc";
+System.out.println(s1);//执行结果：abc
+</code></pre>
+<hr>
+<p><strong>b.</strong> 通过new关键字获取一个空字符串</p>
+<pre class="notranslate"><code class="notranslate">String s1 = new String();
+System.out.println("!"+s1+"!");//执行结果：!!
+</code></pre>
+<hr>
+<p><strong>c.</strong> 传递一个字符串，根据传递的字符串再构造一个新的字符串</p>
+<pre class="notranslate"><code class="notranslate">String s1 = new String("abc");
+System.out.println(s1);//执行结果：abc
+</code></pre>
+<hr>
+<p><strong>d.</strong> 传递一个字符数组，根据字符数组的内容构造新的字符串</p>
+<pre class="notranslate"><code class="notranslate">char[] ch = {'a','b','c'};
+String s1 = new String(ch);
+System.out.println(s1);//执行结果：abc
+</code></pre>
+<hr>
+<p><strong>e.</strong> 传递一个字节数组，根据字节数组的内容构造新的字符串</p>
+<pre class="notranslate"><code class="notranslate">byte[] by = {97,98,'c'};
+String s1 = new String(by);
+System.out.println(s1);//执行结果：abc
+</code></pre>
+<p>在字节数组中，97和98不再代表整形，而是ASCII码表中码值为97、98的符号，即a、b。</p>
+</blockquote>
+<h3>4.字符串构造内存原理</h3>
+<blockquote>
+<p>在Java中内存主要被分为栈、堆、方法区三部分（如下图）。</p>
+<ul>
+<li>栈：主要存储方法，方法开始执行时进栈，结束执时出栈。</li>
+<li>堆：存储对象或数组，使用new关键字时是在堆内存中开辟了空间。从键盘获取的字符串也是存储在堆中。</li>
+<li>方法区：存储可执行的class文件。</li>
+</ul>
+</blockquote>
+<blockquote>
+<a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/104fe0b9a77cf7642eded699d1220330a154c2ebdb284e22a5a8d59be25219fc/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f6469726563742f31386637623562666137333034363335626161633933613761653733643036662e706e67"><img src="https://camo.githubusercontent.com/104fe0b9a77cf7642eded699d1220330a154c2ebdb284e22a5a8d59be25219fc/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f6469726563742f31386637623562666137333034363335626161633933613761653733643036662e706e67" width="503" height="321" data-canonical-src="https://img-blog.csdnimg.cn/direct/18f7b5bfa7304635baac93a7ae73d06f.png" style="max-width: 100%;"></a>
+</blockquote>
+<p>在堆内存中，有一块被称作<strong>串池（String Table）</strong> 的内存空间，它是专门用来存储字符串的内存空间。</p>
+<blockquote>
+<p>如果选择直接赋值（参考2.a）的形式构造字符串，系统会在串池中检查，如果两个字符串的内容完全相同，则直接服用已经构造好的字符串，而不会重新开辟空间存储，减少了空间浪费。</p>
+<pre class="notranslate"><code class="notranslate">String s2 = "abc";
+String s1 = "abc";//s1和s2中地址值是一样的
+</code></pre>
+<hr>
+<p>而如果使用new关键字构造，系统不会检查串池并直接在堆空间中开辟内存。</p>
+<pre class="notranslate"><code class="notranslate">String s2 = new String("abc");
+String s1 = new String("abc");//使用new关键字构造的字符串地址不同
+</code></pre>
+</blockquote>
+<h3>5.字符串比较</h3>
+<blockquote>
+<p><strong>a.</strong> 如果直接用==符号比较，可能并不能反馈正确的结果。由String定义的字符串是一种引用数据类型，在String创建的对象本身的空间中存储的是地址值，而不是数据，==符号比较的是对象本身内存中的数据，因此可能会输出错误的结果。</p>
+<pre class="notranslate"><code class="notranslate">Scanner sc = new Scanner(System.in);//在键盘上输入"abc"，输入的数据是存储在堆内存中的
+String s1 = sc.next();
+String s2 = "abc";
+System.out.println(s1==s2);//执行结果：false
+</code></pre>
+<p><strong>b.</strong> 比较两个字符串内容是否相同可以使用String类中的equals方法。</p>
+<pre class="notranslate"><code class="notranslate">Scanner sc = new Scanner(System.in);//输入"abc"
+String s1 = sc.next();
+String s2 = "abc";
+boolean res = s1.equals(s2);//equals的返回值是boolean类型
+System.out.println(res);//执行结果：true
+</code></pre>
+<p><strong>c.</strong> 比较两个字符串内容是否相同且忽略大小写，使用String类中的equalsIgnoreCase方法。<strong>此处的忽略大小写只针对于英文字母而不针对于中文（如"1"和"一"）。</strong></p>
+<pre class="notranslate"><code class="notranslate">Scanner sc = new Scanner(System.in);//输入"abc"
+String s1 = sc.next();
+String s2 = "Abc";
+boolean res = s1.equalsIgnoreCase(s2);
+System.out.println(res);//执行结果：true
+</code></pre>
+</blockquote>
+<h3>6.字符串常见方法</h3>
+<blockquote>
+<ul>
+<li><strong>public char charAt(int index);</strong></li>
+<li>根据索引（索引下标从0开始）返回字符。</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">String s1 = "abcde";
+char ch = s1.charAt(0);
+System.out.println(ch);//执行结果：a
+</code></pre>
+<hr>
+<ul>
+<li><strong>public int length();</strong></li>
+<li>返回字符串的长度。</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">String s1 = "abcde";
+int len = s1.length();
+System.out.println(len);//执行结果：5
+</code></pre>
+<hr>
+<ul>
+<li><strong>String substring(int begin,int end);</strong></li>
+<li>从字符串中截取并返回下标从begin开始到end-1（不包含end）结束的字符串。</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">String s1 = "abcde";
+String subs1 = s1.substring(0,2);//截取下标从0~1的字符串
+System.out.println(subs1);//执行结果：ab
+</code></pre>
+</blockquote>
+<h2>二、StringBuilder</h2>
+<h3>1.定义</h3>
+<blockquote>
+<p>StringBuilder可以看作一个容器，不同于String，用StringBuilder创建的对象内容是可变的，它可以提高字符串的操作效率。</p>
+<pre class="notranslate"><code class="notranslate">StringBuilder sb = new StringBuilder();
+</code></pre>
+<p>括号中可传参可不传参。</p>
+</blockquote>
+<h3>2.常用方法</h3>
+<blockquote>
+<ul>
+<li><strong>toString();</strong></li>
+<li>将StringBuilder类型的对象转换为String类型。</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">StringBuilder sb = new StringBuilder("abc");
+String s1 = sb.toString();
+System.out.println(s1);//执行结果：abc
+</code></pre>
+<p>需要注意的是，通过StringBuilder创建的对象无法直接使用String中的方法，需要经过toString转换才能使用String中的方法。</p>
+<hr>
+<ul>
+<li><strong>append();</strong></li>
+<li>向StringBuilder创建的对象中添加数据。</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">StringBuilder sb = new StringBuilder("abc");
+System.out.println(sb.toString());//执行结果：abc
+sb.append("123");
+System.out.println(sb.toString());//执行结果：abc123
+</code></pre>
+<hr>
+<ul>
+<li><strong>reverse();</strong></li>
+<li>反转对象中的数据。</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">StringBuilder sb = new StringBuilder("abc123");
+System.out.println(sb.toString());//执行结果：abc123
+sb.reverse();
+System.out.println(sb.toString());//执行结果：321cba
+</code></pre>
+<hr>
+<ul>
+<li><strong>length();</strong></li>
+<li>返回容器中字符串的长度。</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">StringBuilder sb = new StringBuilder("abc123");
+int len = sb.length();
+System.out.println(len);//执行结果：6
+</code></pre>
+<hr>
+<ul>
+<li><strong>capacity();</strong></li>
+<li>返回目前容器的容量。一个空的StringBuilder对象默认容量时16.</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">StringBuilder sb = new StringBuilder();
+System.out.println(sb.capacity());//执行结果：16
+</code></pre>
+</blockquote>
+<h3>3.StringBuilder内存分析</h3>
+<blockquote>
+<p>在创建StringBuilder的对象时，在内存中默认开辟容量为16的字节数组，如果载入的数据超容，则系统会自动 为StringBuilder扩容，新容量=老容量*2+2=34；如果新数据超容且超出自动扩容时的容量，那么新的容量以实际为准。</p>
+<p>需要注意的是，<strong>capacity</strong> 指的是容器能容纳数据的空间大小，而<strong>length</strong> 可以理解为存储在容器中的有效数据的长度。</p>
+<ul>
+<li>初始容量：16</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">StringBuilder sb = new StringBuilder();
+System.out.println(sb.capacity());//执行结果：16
+</code></pre>
+<hr>
+<ul>
+<li>数据内存没有超出默认扩容的内存空间（34）</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">sb.append("abcdefghijklmnopq");
+System.out.println(sb.length());//执行结果：17
+System.out.println(sb.capacity());//执行结果：34
+</code></pre>
+<hr>
+<ul>
+<li>数据内存超出了默认扩容的内存空间</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">sb.append("abcdefghijklmnopqrstuvwxyz123456789");
+System.out.println(sb.length());//执行结果：35
+System.out.println(sb.capacity());//执行结果：35
+</code></pre>
+</blockquote>
+<h2>三、StringJoiner</h2>
+<h3>1.定义</h3>
+<blockquote>
+<p>StringJoiner和StringBuilder一样。都可以看作一种容器，创建之后里面的内容是可变的。StringJoiner的代码编写十分简洁，可以快速有效的完成程序员指定的字符串拼接操作。<strong>StringJoiner是不支持空参构造的。</strong></p>
+<ul>
+<li><strong>StringJoiner sj = new StringJoiner("---");</strong></li>
+<li>创建一个对象，指定拼接时的间隔符号（"---"）。</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">StringJoiner sj = new StringJoiner("---");
+</code></pre>
+<hr>
+<ul>
+<li><strong>StringJoiner sj = new StringJoiner("---", "[", "]");</strong></li>
+<li>创建一个对象，指定拼接时的间隔符号（"---"）、开始符号（"["）、结束符号（"]"）。</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">StringJoiner sj = new StringJoiner("---","[","]");
+</code></pre>
+</blockquote>
+<h3>2.常用方法</h3>
+<blockquote>
+<ul>
+<li><strong>public StringJoiner add(添加的内容);</strong></li>
+<li>添加数据，并返回数据本身</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">StringJoiner sj = new StringJoiner("---","[","]");
+sj.add("aaa");
+sj.add("bbb");
+sj.add("ccc");
+System.out.println(sj);//执行结果：[aaa---bbb---ccc]
+</code></pre>
+<hr>
+<ul>
+<li>public int length();</li>
+<li>返回长度。<strong>这里的length同时包含间隔符号、开始符号、结束符号在内。</strong></li>
+</ul>
+</blockquote>
+<blockquote>
+<pre class="notranslate"><code class="notranslate">StringJoiner sj = new StringJoiner("---","[","]");
+sj.add("aaa");
+sj.add("bbb");
+sj.add("ccc");
+int len = sj.length();
+System.out.println(len);//执行结果：17
+</code></pre>
+<hr>
+<ul>
+<li>public String toString();</li>
+<li>返回一个字符串。</li>
+</ul>
+</blockquote></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+</div>
+    <div id="footer">Copyright © <span id="year"></span><a href="http://blog.meekdai.com"> 陈振威 </a>
+<p>
+<span id="runday"></span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a>
+</p>
+
+<script>
+if(""!=""){
+    var now=new Date();
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("year").innerHTML=now.getFullYear();
+    if(""!=""){document.getElementById("runday").innerHTML=" • "+"网站运行"+diffDay+"天"+" • ";}
+    else{document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";}
+}
+</script>
+</div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n\n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","China-Wei/China-Wei.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+</script>
+
+
+
+</html>

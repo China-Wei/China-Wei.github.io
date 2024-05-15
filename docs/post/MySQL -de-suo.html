@@ -9,7 +9,134 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="MySQL 的锁">
+<meta name="description" content="原链：https://zhuanlan.zhihu.com/p/681227627
+线上系统中，在高并发的访问之下，出现了 死锁问题 或者 等待锁时间过长导致超时，那么碰到这些情况，就可能问你锁相关的问题
+首先还是先给锁分类，之后再来逐个了解：
+按照功能划分：
+
+- 共享锁：也叫 S 锁 或 读锁，是共享的，不互斥
+- 加锁方式：select ... lock in share mode
+- 排他锁：也叫 X 锁 或 写锁，写锁阻塞其他锁
+- 加锁方式：select ... for update
+
+按照锁的粒度划分：
+
+- 全局锁：锁整个数据库
+- 表级锁：锁整个表
+- 行级锁：锁一行记录的索引
+- 记录锁：锁定索引的一条记录
+- 间隙锁：锁定一个索引区间
+- 临键锁：记录锁和间隙锁的结合，解决幻读问题
+- 插入意向锁：执行 insert 时添加的行记录 id 的锁
+- 意向锁：存储引擎级别的“表级锁”
+
+相关命令：
+```
+-- 加锁
+flush tables with read lock;
+
+-- 释放锁
+unlock tables;
+```
+
+表级锁:
+表级锁中又分为以下几种：
+
+- 表读锁：阻塞对当前表的写，但不阻塞读
+- 表写锁：阻塞队当前表的读和写
+- 元数据锁：这个锁不需要我们手动去添加，在访问表的时候，会自动加上，这个锁是为了保证读写的正确
+- 当对表做 增删改查 时，会自动添加元数据读锁
+- 当对表做 结构变更 时，会自动添加元数据写锁
+
+- 自增锁：是一种特殊的表级锁，自增列事务执行插入操作时产生
+查看表级锁的命令：
+
+```
+-- 查看表锁定状态
+show status like 'table_locks%';
+-- 添加表读锁
+lock table user read;
+-- 添加表写锁
+lock table user write;
+-- 查看表锁情况
+show open tables;
+-- 删除表锁
+unlock tables;
+```
+
+![image](https://github.com/China-Wei/China-Wei.github.io/assets/52816610/306ad97d-9743-4e62-8eb9-1ede2bd8ff7d)
+
+**行级锁**
+
+MySQL 的行级锁是由存储引擎是实现的，InnoDB 的行锁就是通过给 索引加锁 来实现
+
+注意：InnoDB 的行锁是针对索引加的锁，不是针对记录加的锁。">
+<meta property="og:title" content="MySQL 的锁">
+<meta property="og:description" content="原链：https://zhuanlan.zhihu.com/p/681227627
+线上系统中，在高并发的访问之下，出现了 死锁问题 或者 等待锁时间过长导致超时，那么碰到这些情况，就可能问你锁相关的问题
+首先还是先给锁分类，之后再来逐个了解：
+按照功能划分：
+
+- 共享锁：也叫 S 锁 或 读锁，是共享的，不互斥
+- 加锁方式：select ... lock in share mode
+- 排他锁：也叫 X 锁 或 写锁，写锁阻塞其他锁
+- 加锁方式：select ... for update
+
+按照锁的粒度划分：
+
+- 全局锁：锁整个数据库
+- 表级锁：锁整个表
+- 行级锁：锁一行记录的索引
+- 记录锁：锁定索引的一条记录
+- 间隙锁：锁定一个索引区间
+- 临键锁：记录锁和间隙锁的结合，解决幻读问题
+- 插入意向锁：执行 insert 时添加的行记录 id 的锁
+- 意向锁：存储引擎级别的“表级锁”
+
+相关命令：
+```
+-- 加锁
+flush tables with read lock;
+
+-- 释放锁
+unlock tables;
+```
+
+表级锁:
+表级锁中又分为以下几种：
+
+- 表读锁：阻塞对当前表的写，但不阻塞读
+- 表写锁：阻塞队当前表的读和写
+- 元数据锁：这个锁不需要我们手动去添加，在访问表的时候，会自动加上，这个锁是为了保证读写的正确
+- 当对表做 增删改查 时，会自动添加元数据读锁
+- 当对表做 结构变更 时，会自动添加元数据写锁
+
+- 自增锁：是一种特殊的表级锁，自增列事务执行插入操作时产生
+查看表级锁的命令：
+
+```
+-- 查看表锁定状态
+show status like 'table_locks%';
+-- 添加表读锁
+lock table user read;
+-- 添加表写锁
+lock table user write;
+-- 查看表锁情况
+show open tables;
+-- 删除表锁
+unlock tables;
+```
+
+![image](https://github.com/China-Wei/China-Wei.github.io/assets/52816610/306ad97d-9743-4e62-8eb9-1ede2bd8ff7d)
+
+**行级锁**
+
+MySQL 的行级锁是由存储引擎是实现的，InnoDB 的行锁就是通过给 索引加锁 来实现
+
+注意：InnoDB 的行锁是针对索引加的锁，不是针对记录加的锁。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://blog.meekdai.com/post/MySQL%20-de-suo.html">
+<meta property="og:image" content="https://meekdai.com/avatar.svg">
 <title>MySQL 的锁</title>
 
 
