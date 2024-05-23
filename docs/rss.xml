@@ -1,5 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>陈振威</title><link>http://blog.meekdai.com</link><description>人生而自由</description><copyright>陈振威</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://meekdai.com/avatar.svg</url><title>avatar</title><link>http://blog.meekdai.com</link></image><lastBuildDate>Thu, 16 May 2024 05:58:35 +0000</lastBuildDate><managingEditor>陈振威</managingEditor><ttl>60</ttl><webMaster>陈振威</webMaster><item><title>【Java】SpringBoot快速整合ElasticSearch</title><link>http://blog.meekdai.com/post/%E3%80%90Java%E3%80%91SpringBoot-kuai-su-zheng-he-ElasticSearch.html</link><description>### 什么是ES？&#13;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>陈振威</title><link>http://blog.meekdai.com</link><description>人生而自由</description><copyright>陈振威</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://meekdai.com/avatar.svg</url><title>avatar</title><link>http://blog.meekdai.com</link></image><lastBuildDate>Thu, 23 May 2024 10:40:17 +0000</lastBuildDate><managingEditor>陈振威</managingEditor><ttl>60</ttl><webMaster>陈振威</webMaster><item><title>github-recovery-codes.txt</title><link>http://blog.meekdai.com/post/github-recovery-codes.txt.html</link><description>15f20-398cb&#13;
+b3b79-efdc3&#13;
+b57ee-13859&#13;
+3af61-994fb&#13;
+41829-5a4dc&#13;
+72038-a328c&#13;
+24b1b-5d6d6&#13;
+b1686-ff026&#13;
+dd711-0f24c&#13;
+90eda-ed2b7&#13;
+6f64f-e5f74&#13;
+4db26-465f6&#13;
+71624-c7c60&#13;
+be6c5-58fea&#13;
+abcc2-2314f&#13;
+02961-845c4。</description><guid isPermaLink="true">http://blog.meekdai.com/post/github-recovery-codes.txt.html</guid><pubDate>Thu, 23 May 2024 10:39:50 +0000</pubDate></item><item><title>【Java】SpringBoot快速整合ElasticSearch</title><link>http://blog.meekdai.com/post/%E3%80%90Java%E3%80%91SpringBoot-kuai-su-zheng-he-ElasticSearch.html</link><description>### 什么是ES？&#13;
 &#13;
 Elasticsearch（简称为ES）是一个开源**的分布式搜索引擎，用于全文搜索、实时分析和可视化。</description><guid isPermaLink="true">http://blog.meekdai.com/post/%E3%80%90Java%E3%80%91SpringBoot-kuai-su-zheng-he-ElasticSearch.html</guid><pubDate>Thu, 16 May 2024 05:45:59 +0000</pubDate></item><item><title>第二讲字符串相关类</title><link>http://blog.meekdai.com/post/di-er-jiang-zi-fu-chuan-xiang-guan-lei.html</link><description>**目录**&#13;
 &#13;
