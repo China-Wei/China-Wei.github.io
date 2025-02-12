@@ -10,14 +10,1274 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="[README.md](https://github.com/user-attachments/files/18761888/README.md)。">
+<meta name="description" content="## 搜索
+
+### 基金搜索
+
+**路由**
+
+`/fundSearch`
+
+**参数**
+
+`m` 搜索类别
+
+- 搜基金: `1`
+- 按字母公司搜基金: `3`
+- 搜基金经理: `7`
+- 搜基金公司: `8`
+
+`key`: 关键字，当值为`3`时,仅`a-z`有效
+
+**结果**
+`/fundSearch?m=1&key=11`
+
+```js
+[{
+  '_id': '110003',
+  'CODE': '110003',
+  'NAME': '易方达上证50增强A',
+  'JP': 'YFDSZ50ZQA',
+  'CATEGORY': 700,
+  'CATEGORYDESC': '基金',
+  'STOCKMARKET': '',
+  'BACKCODE': '',
+  'MatchCount': 1,
+  'FundBaseInfo': {
+    '_id': '110003',
+    'DWJZ': 2.0939,
+    'FCODE': '110003',
+    'FSRQ': '2021-08-30',
+    'FTYPE': '指数型-股票',
+    'FUNDTYPE': '001',
+    'ISBUY': '1',
+    'JJGS': '易方达基金',
+    'JJGSBID': 4,
+    'JJGSID': '80000229',
+    'JJJL': '张胜记',
+    'JJJLID': '30057450',
+    'MINSG': 10,
+    'NAVURL': 'http://fund.eastmoney.com/ZS_jzzzl.html#os_0;isall_0;ft_;pt_5',
+    'OTHERNAME': '易方达50指数,易方达上证50增强,易方达上证50指数,易方达上证50指数A,易基50,易基50增强A,易基50指数,易基50指数A',
+    'SHORTNAME': '易方达上证50增强A'
+  },
+  'StockHolder': '',
+  'ZTJJInfo': [
+    {
+    'TTYPE': 'BK0438',
+    'TTYPENAME': '食品饮料'
+    }
+  ]
+}]
+```
+
+`/fundSearch?m=7&key=w`
+
+```js
+[{
+  'MgrId': '30728448',
+  'MgrName': '徐维君',
+  'AbbName': 'XWJ',
+  'JJGS': '方正富邦基金',
+  'JJGSID': '80174741',
+  'MatchCount': 2
+}]
+```
+
+`/fundSearch?m=3&key=w`
+
+```js
+[{
+  'JJGSID': '81052915',
+  'JJGS': '安信证券资产',
+  'JJGSJP': '',
+  'GSJJBID': null,
+  'QXJJ': [
+    {
+    '_id': '970003',
+    'FCODE': '970003',
+    'SHORTNAME': '安信瑞鸿中短债A'
+    }
+  ]
+}]
+```
+
+`/fundSearch?m=8&key=w`
+
+```js
+[{
+  'JJGSID': '80000031',
+  'JJGS': '东吴证券',
+  'JJGSJP': 'DWZQ',
+  'GSJJBID': '',
+  'QXJJ': null
+}]
+```
+
+### 基金搜索（以名称）
+
+`/fundSearchInfoByName`
+
+**参数**
+
+`orderType` 搜索排序
+
+- 默认: `2`
+- 按热度: `1`
+
+`key`: 关键字
+
+`pageindex`: 页码
+
+`pagesize`: 每页条数
+
+**结果**
+
+```js
+{
+  'totalCount': 647, // 总数
+  'data': [{
+    'fcode': '000075', // 基金代码
+    'showfcode': '000075',
+    'ftype': 'QDII',
+    'shortname': '华夏恒生ETF联接现汇', // 基金名称
+    'hightlight': '000075_<font color='#ff4400'>华夏</font>恒生ETF联接现汇', // 关键字高亮
+    'fcodetype': 0,
+    'secondfcodetype': 0,
+    'abbname': 'HXHSETFLJXH',
+    'abbtname': 'HUAXIAHENGSHENGETFLIANJIEXIANHUI',
+    'foreshortname': '华夏恒生ETF联接现汇',
+    't': 'T',
+    'p': 'F',
+    'f': '',
+    'newtexch': ''
+  },]
+}
+
+```
+
+### 获取基金列表（按字母）
+
+**路由**
+
+`/fundNetList`
+
+**参数**
+
+`fundtype`: 基金类型
+
+- 全部: `0`
+- 股票: `25`
+- 混合: `27`
+- 货币: `35`
+- QDII: `6`
+- LOF: `4`
+- 理财: `2949`
+
+`SortColumn`: 排序列
+
+- 日涨幅: `RDZF`
+- 最新净值: `DWJZ`
+
+`Sort`: 排序方式
+
+- 降序: `desc`
+- 升序: `asc`
+
+`Letter`: 字母排序
+
+- 全部: 不写
+- A: `a`
+- B: `b`
+- 以此类推到`z`
+
+`companyid`: 基金公司 id
+
+`pageIndex`: 页码
+
+`pagesize`: 每页条数
+
+### 获取基金列表（按类型）
+
+**路由**
+
+`/fundMNNetNewList`
+
+**参数**
+
+`fundtype`: 基金类型
+
+- 全部: `0`
+- 股票: `25`
+- 混合: `27`
+- 货币: `35`
+- QDII: `6`
+- LOF: `4`
+- 理财: `2949`
+
+`SortColumn`: 排序列
+
+- 最新净值: `HLDWJZ`
+- 七日年化: `LJJZ`
+
+`Sort`: 排序方式
+
+- 降序: `desc`
+- 升序: `asc`
+
+`Letter`: 字母排序
+
+- 全部: 不写
+- A: `a`
+- B: `b`
+- 以此类推到`z`
+
+`companyid`: 基金公司 id
+
+`pageIndex`: 页码
+
+`pagesize`: 每页条数
+
+### 获取基金列表(所有-简单)
+
+**路由**
+
+`/fundSuggestList`
+
+### 获取基金公司列表（所有）
+
+**路由**
+
+`/fundCompanyBaseList`
+
+
+## 基金主题
+
+### 获取基金主题列表
+
+**路由**
+
+`/fundMNSubjectList`
+
+### 获取热门主题
+
+> app 底部提示数据来源来自 choice
+> **路由**
+
+`/fundThemeList`
+**参数**
+
+`RankItems`: 时间
+
+- 涨幅（实时）: `ZDF`
+- 涨幅（近 1 周）: `SYL_W`
+- 涨幅（近 1 月）: `SYL_M`
+- 涨幅（近 3 月）: `SYL_Q`
+- 涨幅（近 1 年）: `SYL_1N`
+- 涨幅（近 1 年）: `SYL_1N`
+- 涨幅（今年来）: `SYL_JN`
+- 资金流（实时）: `Cinflow`
+- 资金流（近 1 周）: `Cinflow_W`
+- 涨速（3 分钟）: `ZS_3`
+- 涨速（5 分钟）: `ZS_5`
+
+`RankVectors`: 排序
+
+- 降序: `desc`
+- 升序: `asc`
+
+`category` 类别
+
+- 全部: `2`
+- 行业: `0`
+- 概念: `1`
+
+### 获取主题焦点
+
+> app 底部提示数据来源来自 choice
+> **路由**
+
+`/fundThemeFocusList`
+
+**参数**
+
+`code`: 焦点所属 code （没找到在哪，可不填）
+
+## 排行
+
+### 获取基金排行
+
+**路由**
+
+`/fundMNRank`
+
+**参数**
+
+`FundType`: 类型
+
+- 全部： `0`
+- 股票： `25`
+- 混合 `27`
+- 指数 `26`
+- 债券 `31`
+- 货币 `35`
+- QDII: `6`
+- ETF: `3`
+- 接联: `33`
+- FOF: `15`
+- LOF: `4`
+- 商品: `50`
+- 定开债: `32`
+- 理财: `2949`
+
+`SortColumn`: 排序字段
+
+- 收益（全部 股票 混合 指数 债券 货币 QDLL ETF 接联 FOF LOF 商品 定开债 理财）
+
+  - 收益率(近 1 周): `SYL_Z`
+  - 收益率(近 1 月): `SYL_Y`
+  - 收益率(近 3 月): `SYL_3Y`
+  - 收益率(近 6 月): `SYL_6Y`
+  - 收益率(今年来): `SYL_JN`
+  - 收益率(近 1 年): `SYL_1N`
+  - 收益率(近 2 年): `SYL_2N`
+  - 收益率(近 3 年): `SYL_3N`
+  - 收益率(近 5 年): `SYL_5N`
+  - 收益率(成立以来): `SYL_LN`
+  - 规模: `ENDNAV`
+
+- 净值涨幅（全部 股票 混合 指数 债券 QDLL ETF 接联 FOF LOF 商品 定开债）
+
+  - 净值: `HLDWJZ`
+  - 日涨幅: `RZDF`
+
+- 年化 (货币 35 理财 2949)
+
+  - 万份收益: `DWJZ`
+  - 7 日年化: `LJJZ`
+  - 14 日年化: `FTYI`
+  - 28 日年化: `TEYI`
+  - 35 日年化: `TFYI`
+
+- 封闭期开放日 (定开债 32)
+
+  - 封闭期: `CYCLE`
+  - 下一个开放日: `KFR`
+
+- 定投（全部 股票 混合 QDLL 债券 指数）
+
+  - 定投（普通定投 近 1 年）: `PTDT_Y`
+  - 定投（普通定投 近 2 年）: `PTDT_TWY`
+  - 定投（普通定投 近 3 年）: `PTDT_TRY`
+  - 定投（普通定投 近 5 年）: `PTDT_FY`
+
+  - 定投（智慧定投 近 1 年）: `DWDT_Y`
+  - 定投（智慧定投 近 2 年）: `DWDT_TWY`
+  - 定投（智慧定投 近 3 年）: `DWDT_TRY`
+  - 定投（智慧定投 近 5 年）: `DWDT_FY`
+
+  - 定投（目标止盈 近 1 年）: `MBDT_Y`
+  - 定投（目标止盈 近 2 年）: `MBDT_TWY`
+  - 定投（目标止盈 近 3 年）: `MBDT_TRY`
+  - 定投（目标止盈 近 5 年）: `MBDT_FY`
+
+  - 定投（移动止盈 近 1 年）: `YDDT_Y`
+  - 定投（移动止盈 近 2 年）: `YDDT_TWY`
+  - 定投（移动止盈 近 3 年）: `YDDT_TRY`
+  - 定投（移动止盈 近 5 年）: `YDDT_FY`
+
+- 热销（全部 股票 混合 QDLL 债券 指数）
+
+  - 热销（日榜）: `SALESRANK_D`
+  - 热销（周榜）: `SALESRANK_Z`
+  - 热销（月榜）: `SALESRANK`
+  - 热销（季榜）: `SALESRANK_3Y`
+  - 热销（半年榜）: `SALESRANK_6Y`
+  - 热销（年榜）: `SALESRANK_1N`
+
+- 访问（全部 股票 混合 债券 指数）
+
+  - 访问（日榜）: `PVRANK_D`
+  - 访问（周榜）: `PVRANK_Z`
+  - 访问（月榜）: `PVRANK_Y`
+  - 访问（季榜）: `PVRANK_3Y`
+
+- 定投热销（全部 股票 混合 QDLL 债券 指数）: `DTSALESRANK_Y`
+
+`Sort`: 排序
+
+- 降序: `desc`
+- 升序: `asc`
+
+`pageIndex`: 页码 1 开始
+
+`pageSize`: 每页条数 最大30条
+
+`CompanyId`: 基金公司 id （通过`/fundCompanyBaseList`获取）
+
+`CLTYPE`: 筛选方案（多选用`,`分开，如`022,006`）（通过`/bigDataList`获取）
+
+- 全部: `0`
+- 金牛奖: `022`
+- 五星评级: `006`
+- 2020 年度收益排行: `042`
+- 2020 年度收益排行: `024`
+- 高股息红利: `029`
+- 优质债券: `038`
+- 高夏普比率: `021`
+- 持续霸榜: `025`
+- 沪深 300 指数增强: `030`
+- 十年老牌: `031`
+- 低回撤: `034`
+- 电子信息主题: `044`
+
+`ISABNORMAL`: 是否去除因巨额赎回导致的异常涨幅
+
+- 是: `true`
+- 否: `false`
+
+`BUY`: 开放状态
+
+- 可购: `true`
+- 全部: `false`
+
+`DISCOUNT`: 申购费率（多选用`,`分开，如`0,1`）可不填为不过滤
+
+- 0 费率: `0`
+- 1 折: `1`
+
+`LevelOne`: 股票型类型（多选用`,`分开，如`N050,050`）可不填为不过滤
+
+- 股票型: `N050`
+- 股票指数: `050`
+
+`ENDNAV`：基金规模 单位：亿元 （多选用`,`分开，如`1,2`）可不填为不过滤
+
+- 小于等于 2: `1`
+- 2-10: `2`
+- 10-50: `3`
+- 50-100: `4`
+- 大于 100: `5`
+
+`RLEVEL_SZ`：基金评级 上海证券评级 （多选用`,`分开，如`5,4`）可不填为不过滤
+
+- 五星: `5`
+- 四星: `4`
+- 三星: `3`
+- 二星: `2`
+- 一星: `1`
+
+`ESTABDATE`：成立年限 单位：年 （多选用`,`分开，如`1,2`）可不填为不过滤
+
+- 小于等于 1: `1`
+- 1-2: `2`
+- 2-3: `3`
+- 3-4: `4`
+- 4-5: `5`
+- 大于 5: `6`
+
+`TOPICAL`：基金主题 参考（`/fundMNSubjectList`）（多选用`,`分开，如`BK0735,BK0499`）可不填为不过滤
+
+`RISKLEVEL`：风险类型 （多选用`,`分开，如`1,2`）可不填为不过滤
+
+- 低风险: `1`
+- 中低风险: `2`
+- 中风险: `3`
+- 中高风险: `4`
+- 高风险: `5`
+
+**未知参数**
+
+- 如出错请传
+
+  - `DataConstraintType`: `0`
+
+- 可不传
+  - `LevelTwo`
+
+### 获取基金排行（香港）
+
+**路由**
+`/fundMNHKRank`
+
+**参数**
+`FundType`: 类型
+
+- 全部： `0`
+
+`SortColumn`: 排序字段
+
+- 净值: `NAV`
+- 币种: `JZCUNIT`
+- 日涨幅: `NAVCHGRT`
+- 收益率(近 1 周): `W`
+- 收益率(近 1 月): `M`
+- 收益率(近 3 月): `Q`
+- 收益率(今年来): `SY`
+- 收益率(近 1 年): `Y`
+- 收益率(近 2 年): `TWY`
+- 收益率(近 3 年): `TRY`
+- 收益率(成立以来): `SE`
+- 收益率(近 2 年): `TWY`
+
+`Sort`: 排序
+
+- 降序: `desc`
+- 升序: `asc`
+
+`pageIndex`: 页码 1 开始
+
+`pageSize`: 每页条数
+
+`CompanyId`: 基金公司 id （通过`/fundCompanyBaseList`获取）
+
+`CLTYPE`: 筛选方案（多选用`,`分开，如`022,006`）
+
+- 全部: `0`
+- 金牛奖: `022`
+- 五星评级: `006`
+- 2020 年度收益排行: `042`
+- 2020 年度收益排行: `024`
+- 高股息红利: `029`
+- 优质债券: `038`
+- 高夏普比率: `021`
+- 持续霸榜: `025`
+- 沪深 300 指数增强: `030`
+- 十年老牌: `031`
+- 低回撤: `034`
+- 电子信息主题: `044`
+
+`ISABNORMAL`: 是否去除因巨额赎回导致的异常涨幅
+
+- 是: `true`
+- 否: `false`
+
+`BUY`: 开放状态
+
+- 可购: `true`
+- 全部: `false`
+
+`DISCOUNT`: 申购费率（多选用`,`分开，如`0,1`）可不填为不过滤
+
+- 0 费率: `0`
+- 1 折: `1`
+
+`LevelOne`: 股票型类型（多选用`,`分开，如`N050,050`）可不填为不过滤
+
+- 股票型: `N050`
+- 股票指数: `050`
+
+`ENDNAV`：基金规模 单位：亿元 （多选用`,`分开，如`1,2`）可不填为不过滤
+
+- 小于等于 2: `1`
+- 2-10: `2`
+- 10-50: `3`
+- 50-100: `4`
+- 大于 100: `5`
+
+`RLEVEL_SZ`：基金评级 上海证券评级 （多选用`,`分开，如`5,4`）可不填为不过滤
+
+- 五星: `5`
+- 四星: `4`
+- 三星: `3`
+- 二星: `2`
+- 一星: `1`
+
+`ESTABDATE`：成立年限 单位：年 （多选用`,`分开，如`1,2`）可不填为不过滤
+
+- 小于等于 1: `1`
+- 1-2: `2`
+- 2-3: `3`
+- 3-4: `4`
+- 4-5: `5`
+- 大于 5: `6`
+
+`TOPICAL`：基金主题 参考（`/fundMNSubjectList`）（多选用`,`分开，如`BK0735,BK0499`）可不填为不过滤
+
+`RISKLEVEL`：风险类型 （多选用`,`分开，如`1,2`）可不填为不过滤
+
+- 低风险: `1`
+- 中低风险: `2`
+- 中风险: `3`
+- 中高风险: `4`
+- 高风险: `5`
+
+**未知参数**
+
+- 如出错请传
+
+  - `DataConstraintType`: `0`
+
+- 可不传
+  - `LevelTwo`
+
+## 大数据
+
+### 获取大数据榜单
+
+**路由**
+
+`/bigDataList`
+
+**参数**
+
+`ClCategory：` 类型
+
+- 全部榜单：`0`
+- 独家数据：`1`
+- 策略精选：`2`
+- 主题热榜：`3`
+
+**结果**
+
+```js
+[{
+  'ClType': '001',
+  'SType': '5',
+  'ClCategory': '1',
+  'Title': '大家都在买',
+  'SubTitle': '近1月购买人数最多',
+  'SubColor': '#999999',
+  'Text': '热销',
+  'IsTextShow': '0',
+  'Description': '展示近一月购买人数最多的基金，并显示基金即时的近一年收益率。">
 <meta property="og:title" content="股票相关">
-<meta property="og:description" content="[README.md](https://github.com/user-attachments/files/18761888/README.md)。">
+<meta property="og:description" content="## 搜索
+
+### 基金搜索
+
+**路由**
+
+`/fundSearch`
+
+**参数**
+
+`m` 搜索类别
+
+- 搜基金: `1`
+- 按字母公司搜基金: `3`
+- 搜基金经理: `7`
+- 搜基金公司: `8`
+
+`key`: 关键字，当值为`3`时,仅`a-z`有效
+
+**结果**
+`/fundSearch?m=1&key=11`
+
+```js
+[{
+  '_id': '110003',
+  'CODE': '110003',
+  'NAME': '易方达上证50增强A',
+  'JP': 'YFDSZ50ZQA',
+  'CATEGORY': 700,
+  'CATEGORYDESC': '基金',
+  'STOCKMARKET': '',
+  'BACKCODE': '',
+  'MatchCount': 1,
+  'FundBaseInfo': {
+    '_id': '110003',
+    'DWJZ': 2.0939,
+    'FCODE': '110003',
+    'FSRQ': '2021-08-30',
+    'FTYPE': '指数型-股票',
+    'FUNDTYPE': '001',
+    'ISBUY': '1',
+    'JJGS': '易方达基金',
+    'JJGSBID': 4,
+    'JJGSID': '80000229',
+    'JJJL': '张胜记',
+    'JJJLID': '30057450',
+    'MINSG': 10,
+    'NAVURL': 'http://fund.eastmoney.com/ZS_jzzzl.html#os_0;isall_0;ft_;pt_5',
+    'OTHERNAME': '易方达50指数,易方达上证50增强,易方达上证50指数,易方达上证50指数A,易基50,易基50增强A,易基50指数,易基50指数A',
+    'SHORTNAME': '易方达上证50增强A'
+  },
+  'StockHolder': '',
+  'ZTJJInfo': [
+    {
+    'TTYPE': 'BK0438',
+    'TTYPENAME': '食品饮料'
+    }
+  ]
+}]
+```
+
+`/fundSearch?m=7&key=w`
+
+```js
+[{
+  'MgrId': '30728448',
+  'MgrName': '徐维君',
+  'AbbName': 'XWJ',
+  'JJGS': '方正富邦基金',
+  'JJGSID': '80174741',
+  'MatchCount': 2
+}]
+```
+
+`/fundSearch?m=3&key=w`
+
+```js
+[{
+  'JJGSID': '81052915',
+  'JJGS': '安信证券资产',
+  'JJGSJP': '',
+  'GSJJBID': null,
+  'QXJJ': [
+    {
+    '_id': '970003',
+    'FCODE': '970003',
+    'SHORTNAME': '安信瑞鸿中短债A'
+    }
+  ]
+}]
+```
+
+`/fundSearch?m=8&key=w`
+
+```js
+[{
+  'JJGSID': '80000031',
+  'JJGS': '东吴证券',
+  'JJGSJP': 'DWZQ',
+  'GSJJBID': '',
+  'QXJJ': null
+}]
+```
+
+### 基金搜索（以名称）
+
+`/fundSearchInfoByName`
+
+**参数**
+
+`orderType` 搜索排序
+
+- 默认: `2`
+- 按热度: `1`
+
+`key`: 关键字
+
+`pageindex`: 页码
+
+`pagesize`: 每页条数
+
+**结果**
+
+```js
+{
+  'totalCount': 647, // 总数
+  'data': [{
+    'fcode': '000075', // 基金代码
+    'showfcode': '000075',
+    'ftype': 'QDII',
+    'shortname': '华夏恒生ETF联接现汇', // 基金名称
+    'hightlight': '000075_<font color='#ff4400'>华夏</font>恒生ETF联接现汇', // 关键字高亮
+    'fcodetype': 0,
+    'secondfcodetype': 0,
+    'abbname': 'HXHSETFLJXH',
+    'abbtname': 'HUAXIAHENGSHENGETFLIANJIEXIANHUI',
+    'foreshortname': '华夏恒生ETF联接现汇',
+    't': 'T',
+    'p': 'F',
+    'f': '',
+    'newtexch': ''
+  },]
+}
+
+```
+
+### 获取基金列表（按字母）
+
+**路由**
+
+`/fundNetList`
+
+**参数**
+
+`fundtype`: 基金类型
+
+- 全部: `0`
+- 股票: `25`
+- 混合: `27`
+- 货币: `35`
+- QDII: `6`
+- LOF: `4`
+- 理财: `2949`
+
+`SortColumn`: 排序列
+
+- 日涨幅: `RDZF`
+- 最新净值: `DWJZ`
+
+`Sort`: 排序方式
+
+- 降序: `desc`
+- 升序: `asc`
+
+`Letter`: 字母排序
+
+- 全部: 不写
+- A: `a`
+- B: `b`
+- 以此类推到`z`
+
+`companyid`: 基金公司 id
+
+`pageIndex`: 页码
+
+`pagesize`: 每页条数
+
+### 获取基金列表（按类型）
+
+**路由**
+
+`/fundMNNetNewList`
+
+**参数**
+
+`fundtype`: 基金类型
+
+- 全部: `0`
+- 股票: `25`
+- 混合: `27`
+- 货币: `35`
+- QDII: `6`
+- LOF: `4`
+- 理财: `2949`
+
+`SortColumn`: 排序列
+
+- 最新净值: `HLDWJZ`
+- 七日年化: `LJJZ`
+
+`Sort`: 排序方式
+
+- 降序: `desc`
+- 升序: `asc`
+
+`Letter`: 字母排序
+
+- 全部: 不写
+- A: `a`
+- B: `b`
+- 以此类推到`z`
+
+`companyid`: 基金公司 id
+
+`pageIndex`: 页码
+
+`pagesize`: 每页条数
+
+### 获取基金列表(所有-简单)
+
+**路由**
+
+`/fundSuggestList`
+
+### 获取基金公司列表（所有）
+
+**路由**
+
+`/fundCompanyBaseList`
+
+
+## 基金主题
+
+### 获取基金主题列表
+
+**路由**
+
+`/fundMNSubjectList`
+
+### 获取热门主题
+
+> app 底部提示数据来源来自 choice
+> **路由**
+
+`/fundThemeList`
+**参数**
+
+`RankItems`: 时间
+
+- 涨幅（实时）: `ZDF`
+- 涨幅（近 1 周）: `SYL_W`
+- 涨幅（近 1 月）: `SYL_M`
+- 涨幅（近 3 月）: `SYL_Q`
+- 涨幅（近 1 年）: `SYL_1N`
+- 涨幅（近 1 年）: `SYL_1N`
+- 涨幅（今年来）: `SYL_JN`
+- 资金流（实时）: `Cinflow`
+- 资金流（近 1 周）: `Cinflow_W`
+- 涨速（3 分钟）: `ZS_3`
+- 涨速（5 分钟）: `ZS_5`
+
+`RankVectors`: 排序
+
+- 降序: `desc`
+- 升序: `asc`
+
+`category` 类别
+
+- 全部: `2`
+- 行业: `0`
+- 概念: `1`
+
+### 获取主题焦点
+
+> app 底部提示数据来源来自 choice
+> **路由**
+
+`/fundThemeFocusList`
+
+**参数**
+
+`code`: 焦点所属 code （没找到在哪，可不填）
+
+## 排行
+
+### 获取基金排行
+
+**路由**
+
+`/fundMNRank`
+
+**参数**
+
+`FundType`: 类型
+
+- 全部： `0`
+- 股票： `25`
+- 混合 `27`
+- 指数 `26`
+- 债券 `31`
+- 货币 `35`
+- QDII: `6`
+- ETF: `3`
+- 接联: `33`
+- FOF: `15`
+- LOF: `4`
+- 商品: `50`
+- 定开债: `32`
+- 理财: `2949`
+
+`SortColumn`: 排序字段
+
+- 收益（全部 股票 混合 指数 债券 货币 QDLL ETF 接联 FOF LOF 商品 定开债 理财）
+
+  - 收益率(近 1 周): `SYL_Z`
+  - 收益率(近 1 月): `SYL_Y`
+  - 收益率(近 3 月): `SYL_3Y`
+  - 收益率(近 6 月): `SYL_6Y`
+  - 收益率(今年来): `SYL_JN`
+  - 收益率(近 1 年): `SYL_1N`
+  - 收益率(近 2 年): `SYL_2N`
+  - 收益率(近 3 年): `SYL_3N`
+  - 收益率(近 5 年): `SYL_5N`
+  - 收益率(成立以来): `SYL_LN`
+  - 规模: `ENDNAV`
+
+- 净值涨幅（全部 股票 混合 指数 债券 QDLL ETF 接联 FOF LOF 商品 定开债）
+
+  - 净值: `HLDWJZ`
+  - 日涨幅: `RZDF`
+
+- 年化 (货币 35 理财 2949)
+
+  - 万份收益: `DWJZ`
+  - 7 日年化: `LJJZ`
+  - 14 日年化: `FTYI`
+  - 28 日年化: `TEYI`
+  - 35 日年化: `TFYI`
+
+- 封闭期开放日 (定开债 32)
+
+  - 封闭期: `CYCLE`
+  - 下一个开放日: `KFR`
+
+- 定投（全部 股票 混合 QDLL 债券 指数）
+
+  - 定投（普通定投 近 1 年）: `PTDT_Y`
+  - 定投（普通定投 近 2 年）: `PTDT_TWY`
+  - 定投（普通定投 近 3 年）: `PTDT_TRY`
+  - 定投（普通定投 近 5 年）: `PTDT_FY`
+
+  - 定投（智慧定投 近 1 年）: `DWDT_Y`
+  - 定投（智慧定投 近 2 年）: `DWDT_TWY`
+  - 定投（智慧定投 近 3 年）: `DWDT_TRY`
+  - 定投（智慧定投 近 5 年）: `DWDT_FY`
+
+  - 定投（目标止盈 近 1 年）: `MBDT_Y`
+  - 定投（目标止盈 近 2 年）: `MBDT_TWY`
+  - 定投（目标止盈 近 3 年）: `MBDT_TRY`
+  - 定投（目标止盈 近 5 年）: `MBDT_FY`
+
+  - 定投（移动止盈 近 1 年）: `YDDT_Y`
+  - 定投（移动止盈 近 2 年）: `YDDT_TWY`
+  - 定投（移动止盈 近 3 年）: `YDDT_TRY`
+  - 定投（移动止盈 近 5 年）: `YDDT_FY`
+
+- 热销（全部 股票 混合 QDLL 债券 指数）
+
+  - 热销（日榜）: `SALESRANK_D`
+  - 热销（周榜）: `SALESRANK_Z`
+  - 热销（月榜）: `SALESRANK`
+  - 热销（季榜）: `SALESRANK_3Y`
+  - 热销（半年榜）: `SALESRANK_6Y`
+  - 热销（年榜）: `SALESRANK_1N`
+
+- 访问（全部 股票 混合 债券 指数）
+
+  - 访问（日榜）: `PVRANK_D`
+  - 访问（周榜）: `PVRANK_Z`
+  - 访问（月榜）: `PVRANK_Y`
+  - 访问（季榜）: `PVRANK_3Y`
+
+- 定投热销（全部 股票 混合 QDLL 债券 指数）: `DTSALESRANK_Y`
+
+`Sort`: 排序
+
+- 降序: `desc`
+- 升序: `asc`
+
+`pageIndex`: 页码 1 开始
+
+`pageSize`: 每页条数 最大30条
+
+`CompanyId`: 基金公司 id （通过`/fundCompanyBaseList`获取）
+
+`CLTYPE`: 筛选方案（多选用`,`分开，如`022,006`）（通过`/bigDataList`获取）
+
+- 全部: `0`
+- 金牛奖: `022`
+- 五星评级: `006`
+- 2020 年度收益排行: `042`
+- 2020 年度收益排行: `024`
+- 高股息红利: `029`
+- 优质债券: `038`
+- 高夏普比率: `021`
+- 持续霸榜: `025`
+- 沪深 300 指数增强: `030`
+- 十年老牌: `031`
+- 低回撤: `034`
+- 电子信息主题: `044`
+
+`ISABNORMAL`: 是否去除因巨额赎回导致的异常涨幅
+
+- 是: `true`
+- 否: `false`
+
+`BUY`: 开放状态
+
+- 可购: `true`
+- 全部: `false`
+
+`DISCOUNT`: 申购费率（多选用`,`分开，如`0,1`）可不填为不过滤
+
+- 0 费率: `0`
+- 1 折: `1`
+
+`LevelOne`: 股票型类型（多选用`,`分开，如`N050,050`）可不填为不过滤
+
+- 股票型: `N050`
+- 股票指数: `050`
+
+`ENDNAV`：基金规模 单位：亿元 （多选用`,`分开，如`1,2`）可不填为不过滤
+
+- 小于等于 2: `1`
+- 2-10: `2`
+- 10-50: `3`
+- 50-100: `4`
+- 大于 100: `5`
+
+`RLEVEL_SZ`：基金评级 上海证券评级 （多选用`,`分开，如`5,4`）可不填为不过滤
+
+- 五星: `5`
+- 四星: `4`
+- 三星: `3`
+- 二星: `2`
+- 一星: `1`
+
+`ESTABDATE`：成立年限 单位：年 （多选用`,`分开，如`1,2`）可不填为不过滤
+
+- 小于等于 1: `1`
+- 1-2: `2`
+- 2-3: `3`
+- 3-4: `4`
+- 4-5: `5`
+- 大于 5: `6`
+
+`TOPICAL`：基金主题 参考（`/fundMNSubjectList`）（多选用`,`分开，如`BK0735,BK0499`）可不填为不过滤
+
+`RISKLEVEL`：风险类型 （多选用`,`分开，如`1,2`）可不填为不过滤
+
+- 低风险: `1`
+- 中低风险: `2`
+- 中风险: `3`
+- 中高风险: `4`
+- 高风险: `5`
+
+**未知参数**
+
+- 如出错请传
+
+  - `DataConstraintType`: `0`
+
+- 可不传
+  - `LevelTwo`
+
+### 获取基金排行（香港）
+
+**路由**
+`/fundMNHKRank`
+
+**参数**
+`FundType`: 类型
+
+- 全部： `0`
+
+`SortColumn`: 排序字段
+
+- 净值: `NAV`
+- 币种: `JZCUNIT`
+- 日涨幅: `NAVCHGRT`
+- 收益率(近 1 周): `W`
+- 收益率(近 1 月): `M`
+- 收益率(近 3 月): `Q`
+- 收益率(今年来): `SY`
+- 收益率(近 1 年): `Y`
+- 收益率(近 2 年): `TWY`
+- 收益率(近 3 年): `TRY`
+- 收益率(成立以来): `SE`
+- 收益率(近 2 年): `TWY`
+
+`Sort`: 排序
+
+- 降序: `desc`
+- 升序: `asc`
+
+`pageIndex`: 页码 1 开始
+
+`pageSize`: 每页条数
+
+`CompanyId`: 基金公司 id （通过`/fundCompanyBaseList`获取）
+
+`CLTYPE`: 筛选方案（多选用`,`分开，如`022,006`）
+
+- 全部: `0`
+- 金牛奖: `022`
+- 五星评级: `006`
+- 2020 年度收益排行: `042`
+- 2020 年度收益排行: `024`
+- 高股息红利: `029`
+- 优质债券: `038`
+- 高夏普比率: `021`
+- 持续霸榜: `025`
+- 沪深 300 指数增强: `030`
+- 十年老牌: `031`
+- 低回撤: `034`
+- 电子信息主题: `044`
+
+`ISABNORMAL`: 是否去除因巨额赎回导致的异常涨幅
+
+- 是: `true`
+- 否: `false`
+
+`BUY`: 开放状态
+
+- 可购: `true`
+- 全部: `false`
+
+`DISCOUNT`: 申购费率（多选用`,`分开，如`0,1`）可不填为不过滤
+
+- 0 费率: `0`
+- 1 折: `1`
+
+`LevelOne`: 股票型类型（多选用`,`分开，如`N050,050`）可不填为不过滤
+
+- 股票型: `N050`
+- 股票指数: `050`
+
+`ENDNAV`：基金规模 单位：亿元 （多选用`,`分开，如`1,2`）可不填为不过滤
+
+- 小于等于 2: `1`
+- 2-10: `2`
+- 10-50: `3`
+- 50-100: `4`
+- 大于 100: `5`
+
+`RLEVEL_SZ`：基金评级 上海证券评级 （多选用`,`分开，如`5,4`）可不填为不过滤
+
+- 五星: `5`
+- 四星: `4`
+- 三星: `3`
+- 二星: `2`
+- 一星: `1`
+
+`ESTABDATE`：成立年限 单位：年 （多选用`,`分开，如`1,2`）可不填为不过滤
+
+- 小于等于 1: `1`
+- 1-2: `2`
+- 2-3: `3`
+- 3-4: `4`
+- 4-5: `5`
+- 大于 5: `6`
+
+`TOPICAL`：基金主题 参考（`/fundMNSubjectList`）（多选用`,`分开，如`BK0735,BK0499`）可不填为不过滤
+
+`RISKLEVEL`：风险类型 （多选用`,`分开，如`1,2`）可不填为不过滤
+
+- 低风险: `1`
+- 中低风险: `2`
+- 中风险: `3`
+- 中高风险: `4`
+- 高风险: `5`
+
+**未知参数**
+
+- 如出错请传
+
+  - `DataConstraintType`: `0`
+
+- 可不传
+  - `LevelTwo`
+
+## 大数据
+
+### 获取大数据榜单
+
+**路由**
+
+`/bigDataList`
+
+**参数**
+
+`ClCategory：` 类型
+
+- 全部榜单：`0`
+- 独家数据：`1`
+- 策略精选：`2`
+- 主题热榜：`3`
+
+**结果**
+
+```js
+[{
+  'ClType': '001',
+  'SType': '5',
+  'ClCategory': '1',
+  'Title': '大家都在买',
+  'SubTitle': '近1月购买人数最多',
+  'SubColor': '#999999',
+  'Text': '热销',
+  'IsTextShow': '0',
+  'Description': '展示近一月购买人数最多的基金，并显示基金即时的近一年收益率。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="http://blog.meekdai.com/post/gu-piao-xiang-guan.html">
 <meta property="og:image" content="https://meekdai.com/avatar.svg">
 <title>股票相关</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -41,7 +1301,17 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
     body {padding: 8px;}
     .postTitle{font-size:24px;}
 }
-
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
 </style>
 
 
@@ -73,7 +1343,1574 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><p><a href="https://github.com/user-attachments/files/18761888/README.md">README.md</a></p></div>
+<div class="markdown-body" id="postBody"><h2>搜索</h2>
+<h3>基金搜索</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundSearch</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">m</code> 搜索类别</p>
+<ul>
+<li>搜基金: <code class="notranslate">1</code></li>
+<li>按字母公司搜基金: <code class="notranslate">3</code></li>
+<li>搜基金经理: <code class="notranslate">7</code></li>
+<li>搜基金公司: <code class="notranslate">8</code></li>
+</ul>
+<p><code class="notranslate">key</code>: 关键字，当值为<code class="notranslate">3</code>时,仅<code class="notranslate">a-z</code>有效</p>
+<p><strong>结果</strong><br>
+<code class="notranslate">/fundSearch?m=1&amp;key=11</code></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">[</span><span class="pl-kos">{</span>
+  <span class="pl-s">"_id"</span>: <span class="pl-s">"110003"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"CODE"</span>: <span class="pl-s">"110003"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"NAME"</span>: <span class="pl-s">"易方达上证50增强A"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"JP"</span>: <span class="pl-s">"YFDSZ50ZQA"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"CATEGORY"</span>: <span class="pl-c1">700</span><span class="pl-kos">,</span>
+  <span class="pl-s">"CATEGORYDESC"</span>: <span class="pl-s">"基金"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"STOCKMARKET"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+  <span class="pl-s">"BACKCODE"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+  <span class="pl-s">"MatchCount"</span>: <span class="pl-c1">1</span><span class="pl-kos">,</span>
+  <span class="pl-s">"FundBaseInfo"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"_id"</span>: <span class="pl-s">"110003"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"DWJZ"</span>: <span class="pl-c1">2.0939</span><span class="pl-kos">,</span>
+    <span class="pl-s">"FCODE"</span>: <span class="pl-s">"110003"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"FSRQ"</span>: <span class="pl-s">"2021-08-30"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"FTYPE"</span>: <span class="pl-s">"指数型-股票"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"FUNDTYPE"</span>: <span class="pl-s">"001"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"ISBUY"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"JJGS"</span>: <span class="pl-s">"易方达基金"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"JJGSBID"</span>: <span class="pl-c1">4</span><span class="pl-kos">,</span>
+    <span class="pl-s">"JJGSID"</span>: <span class="pl-s">"80000229"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"JJJL"</span>: <span class="pl-s">"张胜记"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"JJJLID"</span>: <span class="pl-s">"30057450"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"MINSG"</span>: <span class="pl-c1">10</span><span class="pl-kos">,</span>
+    <span class="pl-s">"NAVURL"</span>: <span class="pl-s">"http://fund.eastmoney.com/ZS_jzzzl.html#os_0;isall_0;ft_;pt_5"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"OTHERNAME"</span>: <span class="pl-s">"易方达50指数,易方达上证50增强,易方达上证50指数,易方达上证50指数A,易基50,易基50增强A,易基50指数,易基50指数A"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"SHORTNAME"</span>: <span class="pl-s">"易方达上证50增强A"</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-s">"StockHolder"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+  <span class="pl-s">"ZTJJInfo"</span>: <span class="pl-kos">[</span>
+    <span class="pl-kos">{</span>
+    <span class="pl-s">"TTYPE"</span>: <span class="pl-s">"BK0438"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"TTYPENAME"</span>: <span class="pl-s">"食品饮料"</span>
+    <span class="pl-kos">}</span>
+  <span class="pl-kos">]</span>
+<span class="pl-kos">}</span><span class="pl-kos">]</span></pre></div>
+<p><code class="notranslate">/fundSearch?m=7&amp;key=w</code></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">[</span><span class="pl-kos">{</span>
+  <span class="pl-s">"MgrId"</span>: <span class="pl-s">"30728448"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"MgrName"</span>: <span class="pl-s">"徐维君"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"AbbName"</span>: <span class="pl-s">"XWJ"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"JJGS"</span>: <span class="pl-s">"方正富邦基金"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"JJGSID"</span>: <span class="pl-s">"80174741"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"MatchCount"</span>: <span class="pl-c1">2</span>
+<span class="pl-kos">}</span><span class="pl-kos">]</span></pre></div>
+<p><code class="notranslate">/fundSearch?m=3&amp;key=w</code></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">[</span><span class="pl-kos">{</span>
+  <span class="pl-s">"JJGSID"</span>: <span class="pl-s">"81052915"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"JJGS"</span>: <span class="pl-s">"安信证券资产"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"JJGSJP"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+  <span class="pl-s">"GSJJBID"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span>
+  <span class="pl-s">"QXJJ"</span>: <span class="pl-kos">[</span>
+    <span class="pl-kos">{</span>
+    <span class="pl-s">"_id"</span>: <span class="pl-s">"970003"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"FCODE"</span>: <span class="pl-s">"970003"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"SHORTNAME"</span>: <span class="pl-s">"安信瑞鸿中短债A"</span>
+    <span class="pl-kos">}</span>
+  <span class="pl-kos">]</span>
+<span class="pl-kos">}</span><span class="pl-kos">]</span></pre></div>
+<p><code class="notranslate">/fundSearch?m=8&amp;key=w</code></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">[</span><span class="pl-kos">{</span>
+  <span class="pl-s">"JJGSID"</span>: <span class="pl-s">"80000031"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"JJGS"</span>: <span class="pl-s">"东吴证券"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"JJGSJP"</span>: <span class="pl-s">"DWZQ"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"GSJJBID"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+  <span class="pl-s">"QXJJ"</span>: <span class="pl-c1">null</span>
+<span class="pl-kos">}</span><span class="pl-kos">]</span></pre></div>
+<h3>基金搜索（以名称）</h3>
+<p><code class="notranslate">/fundSearchInfoByName</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">orderType</code> 搜索排序</p>
+<ul>
+<li>默认: <code class="notranslate">2</code></li>
+<li>按热度: <code class="notranslate">1</code></li>
+</ul>
+<p><code class="notranslate">key</code>: 关键字</p>
+<p><code class="notranslate">pageindex</code>: 页码</p>
+<p><code class="notranslate">pagesize</code>: 每页条数</p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"totalCount"</span>: <span class="pl-c1">647</span><span class="pl-kos">,</span> <span class="pl-c">// 总数</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+    <span class="pl-s">"fcode"</span>: <span class="pl-s">"000075"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金代码</span>
+    <span class="pl-s">"showfcode"</span>: <span class="pl-s">"000075"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"ftype"</span>: <span class="pl-s">"QDII"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"shortname"</span>: <span class="pl-s">"华夏恒生ETF联接现汇"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金名称</span>
+    <span class="pl-s">"hightlight"</span>: <span class="pl-s">"000075_&lt;font color='#ff4400'&gt;华夏&lt;/font&gt;恒生ETF联接现汇"</span><span class="pl-kos">,</span> <span class="pl-c">// 关键字高亮</span>
+    <span class="pl-s">"fcodetype"</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+    <span class="pl-s">"secondfcodetype"</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+    <span class="pl-s">"abbname"</span>: <span class="pl-s">"HXHSETFLJXH"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"abbtname"</span>: <span class="pl-s">"HUAXIAHENGSHENGETFLIANJIEXIANHUI"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"foreshortname"</span>: <span class="pl-s">"华夏恒生ETF联接现汇"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"t"</span>: <span class="pl-s">"T"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"p"</span>: <span class="pl-s">"F"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"f"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+    <span class="pl-s">"newtexch"</span>: <span class="pl-s">""</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span><span class="pl-kos">]</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金列表（按字母）</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundNetList</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">fundtype</code>: 基金类型</p>
+<ul>
+<li>全部: <code class="notranslate">0</code></li>
+<li>股票: <code class="notranslate">25</code></li>
+<li>混合: <code class="notranslate">27</code></li>
+<li>货币: <code class="notranslate">35</code></li>
+<li>QDII: <code class="notranslate">6</code></li>
+<li>LOF: <code class="notranslate">4</code></li>
+<li>理财: <code class="notranslate">2949</code></li>
+</ul>
+<p><code class="notranslate">SortColumn</code>: 排序列</p>
+<ul>
+<li>日涨幅: <code class="notranslate">RDZF</code></li>
+<li>最新净值: <code class="notranslate">DWJZ</code></li>
+</ul>
+<p><code class="notranslate">Sort</code>: 排序方式</p>
+<ul>
+<li>降序: <code class="notranslate">desc</code></li>
+<li>升序: <code class="notranslate">asc</code></li>
+</ul>
+<p><code class="notranslate">Letter</code>: 字母排序</p>
+<ul>
+<li>全部: 不写</li>
+<li>A: <code class="notranslate">a</code></li>
+<li>B: <code class="notranslate">b</code></li>
+<li>以此类推到<code class="notranslate">z</code></li>
+</ul>
+<p><code class="notranslate">companyid</code>: 基金公司 id</p>
+<p><code class="notranslate">pageIndex</code>: 页码</p>
+<p><code class="notranslate">pagesize</code>: 每页条数</p>
+<h3>获取基金列表（按类型）</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMNNetNewList</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">fundtype</code>: 基金类型</p>
+<ul>
+<li>全部: <code class="notranslate">0</code></li>
+<li>股票: <code class="notranslate">25</code></li>
+<li>混合: <code class="notranslate">27</code></li>
+<li>货币: <code class="notranslate">35</code></li>
+<li>QDII: <code class="notranslate">6</code></li>
+<li>LOF: <code class="notranslate">4</code></li>
+<li>理财: <code class="notranslate">2949</code></li>
+</ul>
+<p><code class="notranslate">SortColumn</code>: 排序列</p>
+<ul>
+<li>最新净值: <code class="notranslate">HLDWJZ</code></li>
+<li>七日年化: <code class="notranslate">LJJZ</code></li>
+</ul>
+<p><code class="notranslate">Sort</code>: 排序方式</p>
+<ul>
+<li>降序: <code class="notranslate">desc</code></li>
+<li>升序: <code class="notranslate">asc</code></li>
+</ul>
+<p><code class="notranslate">Letter</code>: 字母排序</p>
+<ul>
+<li>全部: 不写</li>
+<li>A: <code class="notranslate">a</code></li>
+<li>B: <code class="notranslate">b</code></li>
+<li>以此类推到<code class="notranslate">z</code></li>
+</ul>
+<p><code class="notranslate">companyid</code>: 基金公司 id</p>
+<p><code class="notranslate">pageIndex</code>: 页码</p>
+<p><code class="notranslate">pagesize</code>: 每页条数</p>
+<h3>获取基金列表(所有-简单)</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundSuggestList</code></p>
+<h3>获取基金公司列表（所有）</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundCompanyBaseList</code></p>
+<h2>基金主题</h2>
+<h3>获取基金主题列表</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMNSubjectList</code></p>
+<h3>获取热门主题</h3>
+<blockquote>
+<p>app 底部提示数据来源来自 choice<br>
+<strong>路由</strong></p>
+</blockquote>
+<p><code class="notranslate">/fundThemeList</code><br>
+<strong>参数</strong></p>
+<p><code class="notranslate">RankItems</code>: 时间</p>
+<ul>
+<li>涨幅（实时）: <code class="notranslate">ZDF</code></li>
+<li>涨幅（近 1 周）: <code class="notranslate">SYL_W</code></li>
+<li>涨幅（近 1 月）: <code class="notranslate">SYL_M</code></li>
+<li>涨幅（近 3 月）: <code class="notranslate">SYL_Q</code></li>
+<li>涨幅（近 1 年）: <code class="notranslate">SYL_1N</code></li>
+<li>涨幅（近 1 年）: <code class="notranslate">SYL_1N</code></li>
+<li>涨幅（今年来）: <code class="notranslate">SYL_JN</code></li>
+<li>资金流（实时）: <code class="notranslate">Cinflow</code></li>
+<li>资金流（近 1 周）: <code class="notranslate">Cinflow_W</code></li>
+<li>涨速（3 分钟）: <code class="notranslate">ZS_3</code></li>
+<li>涨速（5 分钟）: <code class="notranslate">ZS_5</code></li>
+</ul>
+<p><code class="notranslate">RankVectors</code>: 排序</p>
+<ul>
+<li>降序: <code class="notranslate">desc</code></li>
+<li>升序: <code class="notranslate">asc</code></li>
+</ul>
+<p><code class="notranslate">category</code> 类别</p>
+<ul>
+<li>全部: <code class="notranslate">2</code></li>
+<li>行业: <code class="notranslate">0</code></li>
+<li>概念: <code class="notranslate">1</code></li>
+</ul>
+<h3>获取主题焦点</h3>
+<blockquote>
+<p>app 底部提示数据来源来自 choice<br>
+<strong>路由</strong></p>
+</blockquote>
+<p><code class="notranslate">/fundThemeFocusList</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">code</code>: 焦点所属 code （没找到在哪，可不填）</p>
+<h2>排行</h2>
+<h3>获取基金排行</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMNRank</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">FundType</code>: 类型</p>
+<ul>
+<li>全部： <code class="notranslate">0</code></li>
+<li>股票： <code class="notranslate">25</code></li>
+<li>混合 <code class="notranslate">27</code></li>
+<li>指数 <code class="notranslate">26</code></li>
+<li>债券 <code class="notranslate">31</code></li>
+<li>货币 <code class="notranslate">35</code></li>
+<li>QDII: <code class="notranslate">6</code></li>
+<li>ETF: <code class="notranslate">3</code></li>
+<li>接联: <code class="notranslate">33</code></li>
+<li>FOF: <code class="notranslate">15</code></li>
+<li>LOF: <code class="notranslate">4</code></li>
+<li>商品: <code class="notranslate">50</code></li>
+<li>定开债: <code class="notranslate">32</code></li>
+<li>理财: <code class="notranslate">2949</code></li>
+</ul>
+<p><code class="notranslate">SortColumn</code>: 排序字段</p>
+<ul>
+<li>
+<p>收益（全部 股票 混合 指数 债券 货币 QDLL ETF 接联 FOF LOF 商品 定开债 理财）</p>
+<ul>
+<li>收益率(近 1 周): <code class="notranslate">SYL_Z</code></li>
+<li>收益率(近 1 月): <code class="notranslate">SYL_Y</code></li>
+<li>收益率(近 3 月): <code class="notranslate">SYL_3Y</code></li>
+<li>收益率(近 6 月): <code class="notranslate">SYL_6Y</code></li>
+<li>收益率(今年来): <code class="notranslate">SYL_JN</code></li>
+<li>收益率(近 1 年): <code class="notranslate">SYL_1N</code></li>
+<li>收益率(近 2 年): <code class="notranslate">SYL_2N</code></li>
+<li>收益率(近 3 年): <code class="notranslate">SYL_3N</code></li>
+<li>收益率(近 5 年): <code class="notranslate">SYL_5N</code></li>
+<li>收益率(成立以来): <code class="notranslate">SYL_LN</code></li>
+<li>规模: <code class="notranslate">ENDNAV</code></li>
+</ul>
+</li>
+<li>
+<p>净值涨幅（全部 股票 混合 指数 债券 QDLL ETF 接联 FOF LOF 商品 定开债）</p>
+<ul>
+<li>净值: <code class="notranslate">HLDWJZ</code></li>
+<li>日涨幅: <code class="notranslate">RZDF</code></li>
+</ul>
+</li>
+<li>
+<p>年化 (货币 35 理财 2949)</p>
+<ul>
+<li>万份收益: <code class="notranslate">DWJZ</code></li>
+<li>7 日年化: <code class="notranslate">LJJZ</code></li>
+<li>14 日年化: <code class="notranslate">FTYI</code></li>
+<li>28 日年化: <code class="notranslate">TEYI</code></li>
+<li>35 日年化: <code class="notranslate">TFYI</code></li>
+</ul>
+</li>
+<li>
+<p>封闭期开放日 (定开债 32)</p>
+<ul>
+<li>封闭期: <code class="notranslate">CYCLE</code></li>
+<li>下一个开放日: <code class="notranslate">KFR</code></li>
+</ul>
+</li>
+<li>
+<p>定投（全部 股票 混合 QDLL 债券 指数）</p>
+<ul>
+<li>
+<p>定投（普通定投 近 1 年）: <code class="notranslate">PTDT_Y</code></p>
+</li>
+<li>
+<p>定投（普通定投 近 2 年）: <code class="notranslate">PTDT_TWY</code></p>
+</li>
+<li>
+<p>定投（普通定投 近 3 年）: <code class="notranslate">PTDT_TRY</code></p>
+</li>
+<li>
+<p>定投（普通定投 近 5 年）: <code class="notranslate">PTDT_FY</code></p>
+</li>
+<li>
+<p>定投（智慧定投 近 1 年）: <code class="notranslate">DWDT_Y</code></p>
+</li>
+<li>
+<p>定投（智慧定投 近 2 年）: <code class="notranslate">DWDT_TWY</code></p>
+</li>
+<li>
+<p>定投（智慧定投 近 3 年）: <code class="notranslate">DWDT_TRY</code></p>
+</li>
+<li>
+<p>定投（智慧定投 近 5 年）: <code class="notranslate">DWDT_FY</code></p>
+</li>
+<li>
+<p>定投（目标止盈 近 1 年）: <code class="notranslate">MBDT_Y</code></p>
+</li>
+<li>
+<p>定投（目标止盈 近 2 年）: <code class="notranslate">MBDT_TWY</code></p>
+</li>
+<li>
+<p>定投（目标止盈 近 3 年）: <code class="notranslate">MBDT_TRY</code></p>
+</li>
+<li>
+<p>定投（目标止盈 近 5 年）: <code class="notranslate">MBDT_FY</code></p>
+</li>
+<li>
+<p>定投（移动止盈 近 1 年）: <code class="notranslate">YDDT_Y</code></p>
+</li>
+<li>
+<p>定投（移动止盈 近 2 年）: <code class="notranslate">YDDT_TWY</code></p>
+</li>
+<li>
+<p>定投（移动止盈 近 3 年）: <code class="notranslate">YDDT_TRY</code></p>
+</li>
+<li>
+<p>定投（移动止盈 近 5 年）: <code class="notranslate">YDDT_FY</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p>热销（全部 股票 混合 QDLL 债券 指数）</p>
+<ul>
+<li>热销（日榜）: <code class="notranslate">SALESRANK_D</code></li>
+<li>热销（周榜）: <code class="notranslate">SALESRANK_Z</code></li>
+<li>热销（月榜）: <code class="notranslate">SALESRANK</code></li>
+<li>热销（季榜）: <code class="notranslate">SALESRANK_3Y</code></li>
+<li>热销（半年榜）: <code class="notranslate">SALESRANK_6Y</code></li>
+<li>热销（年榜）: <code class="notranslate">SALESRANK_1N</code></li>
+</ul>
+</li>
+<li>
+<p>访问（全部 股票 混合 债券 指数）</p>
+<ul>
+<li>访问（日榜）: <code class="notranslate">PVRANK_D</code></li>
+<li>访问（周榜）: <code class="notranslate">PVRANK_Z</code></li>
+<li>访问（月榜）: <code class="notranslate">PVRANK_Y</code></li>
+<li>访问（季榜）: <code class="notranslate">PVRANK_3Y</code></li>
+</ul>
+</li>
+<li>
+<p>定投热销（全部 股票 混合 QDLL 债券 指数）: <code class="notranslate">DTSALESRANK_Y</code></p>
+</li>
+</ul>
+<p><code class="notranslate">Sort</code>: 排序</p>
+<ul>
+<li>降序: <code class="notranslate">desc</code></li>
+<li>升序: <code class="notranslate">asc</code></li>
+</ul>
+<p><code class="notranslate">pageIndex</code>: 页码 1 开始</p>
+<p><code class="notranslate">pageSize</code>: 每页条数 最大30条</p>
+<p><code class="notranslate">CompanyId</code>: 基金公司 id （通过<code class="notranslate">/fundCompanyBaseList</code>获取）</p>
+<p><code class="notranslate">CLTYPE</code>: 筛选方案（多选用<code class="notranslate">,</code>分开，如<code class="notranslate">022,006</code>）（通过<code class="notranslate">/bigDataList</code>获取）</p>
+<ul>
+<li>全部: <code class="notranslate">0</code></li>
+<li>金牛奖: <code class="notranslate">022</code></li>
+<li>五星评级: <code class="notranslate">006</code></li>
+<li>2020 年度收益排行: <code class="notranslate">042</code></li>
+<li>2020 年度收益排行: <code class="notranslate">024</code></li>
+<li>高股息红利: <code class="notranslate">029</code></li>
+<li>优质债券: <code class="notranslate">038</code></li>
+<li>高夏普比率: <code class="notranslate">021</code></li>
+<li>持续霸榜: <code class="notranslate">025</code></li>
+<li>沪深 300 指数增强: <code class="notranslate">030</code></li>
+<li>十年老牌: <code class="notranslate">031</code></li>
+<li>低回撤: <code class="notranslate">034</code></li>
+<li>电子信息主题: <code class="notranslate">044</code></li>
+</ul>
+<p><code class="notranslate">ISABNORMAL</code>: 是否去除因巨额赎回导致的异常涨幅</p>
+<ul>
+<li>是: <code class="notranslate">true</code></li>
+<li>否: <code class="notranslate">false</code></li>
+</ul>
+<p><code class="notranslate">BUY</code>: 开放状态</p>
+<ul>
+<li>可购: <code class="notranslate">true</code></li>
+<li>全部: <code class="notranslate">false</code></li>
+</ul>
+<p><code class="notranslate">DISCOUNT</code>: 申购费率（多选用<code class="notranslate">,</code>分开，如<code class="notranslate">0,1</code>）可不填为不过滤</p>
+<ul>
+<li>0 费率: <code class="notranslate">0</code></li>
+<li>1 折: <code class="notranslate">1</code></li>
+</ul>
+<p><code class="notranslate">LevelOne</code>: 股票型类型（多选用<code class="notranslate">,</code>分开，如<code class="notranslate">N050,050</code>）可不填为不过滤</p>
+<ul>
+<li>股票型: <code class="notranslate">N050</code></li>
+<li>股票指数: <code class="notranslate">050</code></li>
+</ul>
+<p><code class="notranslate">ENDNAV</code>：基金规模 单位：亿元 （多选用<code class="notranslate">,</code>分开，如<code class="notranslate">1,2</code>）可不填为不过滤</p>
+<ul>
+<li>小于等于 2: <code class="notranslate">1</code></li>
+<li>2-10: <code class="notranslate">2</code></li>
+<li>10-50: <code class="notranslate">3</code></li>
+<li>50-100: <code class="notranslate">4</code></li>
+<li>大于 100: <code class="notranslate">5</code></li>
+</ul>
+<p><code class="notranslate">RLEVEL_SZ</code>：基金评级 上海证券评级 （多选用<code class="notranslate">,</code>分开，如<code class="notranslate">5,4</code>）可不填为不过滤</p>
+<ul>
+<li>五星: <code class="notranslate">5</code></li>
+<li>四星: <code class="notranslate">4</code></li>
+<li>三星: <code class="notranslate">3</code></li>
+<li>二星: <code class="notranslate">2</code></li>
+<li>一星: <code class="notranslate">1</code></li>
+</ul>
+<p><code class="notranslate">ESTABDATE</code>：成立年限 单位：年 （多选用<code class="notranslate">,</code>分开，如<code class="notranslate">1,2</code>）可不填为不过滤</p>
+<ul>
+<li>小于等于 1: <code class="notranslate">1</code></li>
+<li>1-2: <code class="notranslate">2</code></li>
+<li>2-3: <code class="notranslate">3</code></li>
+<li>3-4: <code class="notranslate">4</code></li>
+<li>4-5: <code class="notranslate">5</code></li>
+<li>大于 5: <code class="notranslate">6</code></li>
+</ul>
+<p><code class="notranslate">TOPICAL</code>：基金主题 参考（<code class="notranslate">/fundMNSubjectList</code>）（多选用<code class="notranslate">,</code>分开，如<code class="notranslate">BK0735,BK0499</code>）可不填为不过滤</p>
+<p><code class="notranslate">RISKLEVEL</code>：风险类型 （多选用<code class="notranslate">,</code>分开，如<code class="notranslate">1,2</code>）可不填为不过滤</p>
+<ul>
+<li>低风险: <code class="notranslate">1</code></li>
+<li>中低风险: <code class="notranslate">2</code></li>
+<li>中风险: <code class="notranslate">3</code></li>
+<li>中高风险: <code class="notranslate">4</code></li>
+<li>高风险: <code class="notranslate">5</code></li>
+</ul>
+<p><strong>未知参数</strong></p>
+<ul>
+<li>
+<p>如出错请传</p>
+<ul>
+<li><code class="notranslate">DataConstraintType</code>: <code class="notranslate">0</code></li>
+</ul>
+</li>
+<li>
+<p>可不传</p>
+<ul>
+<li><code class="notranslate">LevelTwo</code></li>
+</ul>
+</li>
+</ul>
+<h3>获取基金排行（香港）</h3>
+<p><strong>路由</strong><br>
+<code class="notranslate">/fundMNHKRank</code></p>
+<p><strong>参数</strong><br>
+<code class="notranslate">FundType</code>: 类型</p>
+<ul>
+<li>全部： <code class="notranslate">0</code></li>
+</ul>
+<p><code class="notranslate">SortColumn</code>: 排序字段</p>
+<ul>
+<li>净值: <code class="notranslate">NAV</code></li>
+<li>币种: <code class="notranslate">JZCUNIT</code></li>
+<li>日涨幅: <code class="notranslate">NAVCHGRT</code></li>
+<li>收益率(近 1 周): <code class="notranslate">W</code></li>
+<li>收益率(近 1 月): <code class="notranslate">M</code></li>
+<li>收益率(近 3 月): <code class="notranslate">Q</code></li>
+<li>收益率(今年来): <code class="notranslate">SY</code></li>
+<li>收益率(近 1 年): <code class="notranslate">Y</code></li>
+<li>收益率(近 2 年): <code class="notranslate">TWY</code></li>
+<li>收益率(近 3 年): <code class="notranslate">TRY</code></li>
+<li>收益率(成立以来): <code class="notranslate">SE</code></li>
+<li>收益率(近 2 年): <code class="notranslate">TWY</code></li>
+</ul>
+<p><code class="notranslate">Sort</code>: 排序</p>
+<ul>
+<li>降序: <code class="notranslate">desc</code></li>
+<li>升序: <code class="notranslate">asc</code></li>
+</ul>
+<p><code class="notranslate">pageIndex</code>: 页码 1 开始</p>
+<p><code class="notranslate">pageSize</code>: 每页条数</p>
+<p><code class="notranslate">CompanyId</code>: 基金公司 id （通过<code class="notranslate">/fundCompanyBaseList</code>获取）</p>
+<p><code class="notranslate">CLTYPE</code>: 筛选方案（多选用<code class="notranslate">,</code>分开，如<code class="notranslate">022,006</code>）</p>
+<ul>
+<li>全部: <code class="notranslate">0</code></li>
+<li>金牛奖: <code class="notranslate">022</code></li>
+<li>五星评级: <code class="notranslate">006</code></li>
+<li>2020 年度收益排行: <code class="notranslate">042</code></li>
+<li>2020 年度收益排行: <code class="notranslate">024</code></li>
+<li>高股息红利: <code class="notranslate">029</code></li>
+<li>优质债券: <code class="notranslate">038</code></li>
+<li>高夏普比率: <code class="notranslate">021</code></li>
+<li>持续霸榜: <code class="notranslate">025</code></li>
+<li>沪深 300 指数增强: <code class="notranslate">030</code></li>
+<li>十年老牌: <code class="notranslate">031</code></li>
+<li>低回撤: <code class="notranslate">034</code></li>
+<li>电子信息主题: <code class="notranslate">044</code></li>
+</ul>
+<p><code class="notranslate">ISABNORMAL</code>: 是否去除因巨额赎回导致的异常涨幅</p>
+<ul>
+<li>是: <code class="notranslate">true</code></li>
+<li>否: <code class="notranslate">false</code></li>
+</ul>
+<p><code class="notranslate">BUY</code>: 开放状态</p>
+<ul>
+<li>可购: <code class="notranslate">true</code></li>
+<li>全部: <code class="notranslate">false</code></li>
+</ul>
+<p><code class="notranslate">DISCOUNT</code>: 申购费率（多选用<code class="notranslate">,</code>分开，如<code class="notranslate">0,1</code>）可不填为不过滤</p>
+<ul>
+<li>0 费率: <code class="notranslate">0</code></li>
+<li>1 折: <code class="notranslate">1</code></li>
+</ul>
+<p><code class="notranslate">LevelOne</code>: 股票型类型（多选用<code class="notranslate">,</code>分开，如<code class="notranslate">N050,050</code>）可不填为不过滤</p>
+<ul>
+<li>股票型: <code class="notranslate">N050</code></li>
+<li>股票指数: <code class="notranslate">050</code></li>
+</ul>
+<p><code class="notranslate">ENDNAV</code>：基金规模 单位：亿元 （多选用<code class="notranslate">,</code>分开，如<code class="notranslate">1,2</code>）可不填为不过滤</p>
+<ul>
+<li>小于等于 2: <code class="notranslate">1</code></li>
+<li>2-10: <code class="notranslate">2</code></li>
+<li>10-50: <code class="notranslate">3</code></li>
+<li>50-100: <code class="notranslate">4</code></li>
+<li>大于 100: <code class="notranslate">5</code></li>
+</ul>
+<p><code class="notranslate">RLEVEL_SZ</code>：基金评级 上海证券评级 （多选用<code class="notranslate">,</code>分开，如<code class="notranslate">5,4</code>）可不填为不过滤</p>
+<ul>
+<li>五星: <code class="notranslate">5</code></li>
+<li>四星: <code class="notranslate">4</code></li>
+<li>三星: <code class="notranslate">3</code></li>
+<li>二星: <code class="notranslate">2</code></li>
+<li>一星: <code class="notranslate">1</code></li>
+</ul>
+<p><code class="notranslate">ESTABDATE</code>：成立年限 单位：年 （多选用<code class="notranslate">,</code>分开，如<code class="notranslate">1,2</code>）可不填为不过滤</p>
+<ul>
+<li>小于等于 1: <code class="notranslate">1</code></li>
+<li>1-2: <code class="notranslate">2</code></li>
+<li>2-3: <code class="notranslate">3</code></li>
+<li>3-4: <code class="notranslate">4</code></li>
+<li>4-5: <code class="notranslate">5</code></li>
+<li>大于 5: <code class="notranslate">6</code></li>
+</ul>
+<p><code class="notranslate">TOPICAL</code>：基金主题 参考（<code class="notranslate">/fundMNSubjectList</code>）（多选用<code class="notranslate">,</code>分开，如<code class="notranslate">BK0735,BK0499</code>）可不填为不过滤</p>
+<p><code class="notranslate">RISKLEVEL</code>：风险类型 （多选用<code class="notranslate">,</code>分开，如<code class="notranslate">1,2</code>）可不填为不过滤</p>
+<ul>
+<li>低风险: <code class="notranslate">1</code></li>
+<li>中低风险: <code class="notranslate">2</code></li>
+<li>中风险: <code class="notranslate">3</code></li>
+<li>中高风险: <code class="notranslate">4</code></li>
+<li>高风险: <code class="notranslate">5</code></li>
+</ul>
+<p><strong>未知参数</strong></p>
+<ul>
+<li>
+<p>如出错请传</p>
+<ul>
+<li><code class="notranslate">DataConstraintType</code>: <code class="notranslate">0</code></li>
+</ul>
+</li>
+<li>
+<p>可不传</p>
+<ul>
+<li><code class="notranslate">LevelTwo</code></li>
+</ul>
+</li>
+</ul>
+<h2>大数据</h2>
+<h3>获取大数据榜单</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/bigDataList</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">ClCategory：</code> 类型</p>
+<ul>
+<li>全部榜单：<code class="notranslate">0</code></li>
+<li>独家数据：<code class="notranslate">1</code></li>
+<li>策略精选：<code class="notranslate">2</code></li>
+<li>主题热榜：<code class="notranslate">3</code></li>
+</ul>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">[</span><span class="pl-kos">{</span>
+  <span class="pl-s">"ClType"</span>: <span class="pl-s">"001"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"SType"</span>: <span class="pl-s">"5"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"ClCategory"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"Title"</span>: <span class="pl-s">"大家都在买"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"SubTitle"</span>: <span class="pl-s">"近1月购买人数最多"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"SubColor"</span>: <span class="pl-s">"#999999"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"Text"</span>: <span class="pl-s">"热销"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"IsTextShow"</span>: <span class="pl-s">"0"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"Description"</span>: <span class="pl-s">"展示近一月购买人数最多的基金，并显示基金即时的近一年收益率。销量数据来自天天基金平台。（数据榜单仅供参考，过往业绩不预示未来表现，不构成任何投资建议。投资者据此购买的，风险自担。)"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"FontColor"</span>: <span class="pl-s">"#FF4400"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"FundCode"</span>: <span class="pl-s">"161725"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"FundName"</span>: <span class="pl-s">"招商中证白酒指数(LOF)A"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"SYL"</span>: <span class="pl-s">"54"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"ShowunitMark"</span>: <span class="pl-s">"万人"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"PeriodText"</span>: <span class="pl-s">"购买"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"Link"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"LinkType"</span>: <span class="pl-c1">1</span><span class="pl-kos">,</span>
+    <span class="pl-s">"AdId"</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+    <span class="pl-s">"LinkTo"</span>: <span class="pl-s">"fund://mp.1234567.com.cn/weex/81b5a1d2a2f14d968dedf3ffdf5a6426/pages/strategyPage?tacticsType=001&amp;Stype=5"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"IsVerifyLogin"</span>: <span class="pl-c1">false</span><span class="pl-kos">,</span>
+    <span class="pl-s">"WapLink"</span>: <span class="pl-s">""</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span><span class="pl-kos">]</span></pre></div>
+<h3>获取大数据榜单数据详情</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/bigDataDetail</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">cltype</code> 榜单id （通过 <code class="notranslate">/bigDataList</code> 获取）</p>
+<h2>基金</h2>
+<h3>获取基金简介</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMNStopWatch</code><br>
+<strong>参数</strong></p>
+<p><code class="notranslate">FCODE</code>: 基金代码</p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"FCODE"</span>: <span class="pl-s">"580007"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"SHORTNAME"</span>: <span class="pl-s">"东吴安享量化混合"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"ABBTNAME"</span>: <span class="pl-s">"DONGWUANXIANGLIANGHUAHUNHE"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"P"</span>: <span class="pl-s">"F"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"T"</span>: <span class="pl-s">"H"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"F"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"FTYPE"</span>: <span class="pl-s">"混合型-灵活"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"BACKCODE"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"REALSGCODE"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"QDTCODE"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"LISTTEXCH"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"FEATURE"</span>: <span class="pl-s">"215"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"TSRQ"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"INDEXCODE"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"INDEXNAME"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"INDEXTEXCH"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"BFUNDTYPE"</span>: <span class="pl-s">"002"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"ESTABDATE"</span>: <span class="pl-s">"2010-06-29"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"ISPTP"</span>: <span class="pl-s">"--"</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金详情</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMNDetailInformation</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">FCODE</code> 基金code</p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"FCODE"</span>: <span class="pl-s">"003834"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金代码</span>
+    <span class="pl-s">"FEATURE"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"CYCLE"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"WEBBACKCODE"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"SHORTNAME"</span>: <span class="pl-s">"华夏能源革新股票A"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金名</span>
+    <span class="pl-s">"FULLNAME"</span>: <span class="pl-s">"华夏能源革新股票型证券投资基金"</span><span class="pl-kos">,</span> <span class="pl-c">// 全称</span>
+    <span class="pl-s">"FTYPE"</span>: <span class="pl-s">"股票型"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金类型</span>
+    <span class="pl-s">"ESTABDATE"</span>: <span class="pl-s">"2017-06-07"</span><span class="pl-kos">,</span> <span class="pl-c">// 成立日期</span>
+    <span class="pl-s">"ENDNAV"</span>: <span class="pl-s">"18434368978.8"</span><span class="pl-kos">,</span> <span class="pl-c">// 最新规模</span>
+    <span class="pl-s">"FEGMRQ"</span>: <span class="pl-s">"2022-03-31"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"RLEVEL_SZ"</span>: <span class="pl-s">"3"</span><span class="pl-kos">,</span> <span class="pl-c">// 最新评级</span>
+    <span class="pl-s">"RISKLEVEL"</span>: <span class="pl-s">"5"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"JJGS"</span>: <span class="pl-s">"华夏基金"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金公司</span>
+    <span class="pl-s">"TGYH"</span>: <span class="pl-s">"建设银行"</span><span class="pl-kos">,</span> <span class="pl-c">// 托管人</span>
+    <span class="pl-s">"JJGSID"</span>: <span class="pl-s">"80000222"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"JJJL"</span>: <span class="pl-s">"郑泽鸿"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金经理</span>
+    <span class="pl-s">"NETNAV"</span>: <span class="pl-s">"1482233462.89"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"BENCH"</span>: <span class="pl-s">"中证内地新能源指数收益率*90%+上证国债指数收益率*10%"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"INDEXCODE"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"INDEXNAME"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"PRSVPERIOD"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"PRSVDATE"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"PRSVTYPE"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"BUYTIME"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"MGREXP"</span>: <span class="pl-s">"1.50%"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"TRUSTEXP"</span>: <span class="pl-s">"0.25%"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"SALESEXP"</span>: <span class="pl-s">"0.00%"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"PERFCMP"</span>: <span class="pl-s">"中证内地新能源指数收益率*90%+上证国债指数收益率*10%"</span><span class="pl-kos">,</span> <span class="pl-c">// 业绩比较基准</span>
+    <span class="pl-s">"INVTGT"</span>: <span class="pl-s">"通过精选能源革新的优质企业,在严格控制风险的前提下,力求实现基金资产的长期稳健增值。"</span><span class="pl-kos">,</span> <span class="pl-c">// 投资目标</span>
+    <span class="pl-s">"INVSTRA"</span>: <span class="pl-s">"资产配置策略\r\n本基金通过对宏观经济环境、政策形势、证券市场走势的综合分析,主动判断市场时机,进行积极的资产配置,合理确定基金在股票、债券等各类资产类别上的投资比例,并随着各类资产风险收益特征的相对变化,适时进行动态调整。\n股票投资策略\r\n(1)能源革新主题的界定本基金投资的能源革新主题界定如下:①直接从事新能源产业相关的行业,包括新能源汽车、太阳能、光伏、风能、核能、水能、电力、页岩气、绿色照明、生物资源、天然气发电、地热、垃圾发电、氢能、锂电池、垃圾发电、储能、智能电网、节能环保等。投资标的涵盖新能源产业链的上中下游,包括上游资源类、中游材料类、以及下游运营类上市公司。\r\n②受益于能源革新主题的行业,包括:从传统行业向新能源行业逐步转型的公司;因与新能源主题相关的产业结构升级、消费生活模式转变而受益的其他上市公司。\r\n③新能源推广及其服务行业,包括:为新能源行业提供服务的大金融行业,已经或者计划采用新能源技术的电信设备通讯、电力及电力设备行业,以及为新能源产品销售提供支持的商业、贸易和物流行业等。\r\n鉴于科学技术发展和产业结构升级等因素,能源革新主题的范围可能会发生扩大或者变化,未来如果基金管理人认为有更适当的能源革新主题的界定方法,基金管理人有权对能源革新主题的界定方法进行变更,并在招募说明书更新中公告,不需召开持有人大会。\r\n(2)个股选择\r\n基金将采用定性和定量相结合的方式,精选能源革新主题下的优质个股进行重点投资。\r\n①定性分析主要从公司所在行业的发展特点及公司的行业地位、公司的核心竞争力、公司的经营能力和治理结构等方面进行分析。\r\n②定量分析主要从公司的盈利能力、增长能力、偿债能力、营运能力以及估值水平等方面进行分析。\r\n对于存托凭证投资,本基金将在深入研究的基础上,通过定性分析和定量分析相结合的方式,精选出具有比较优势的存托凭证。"</span> <span class="pl-c">// 投资策略</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金评级</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundGradeDetail</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">FCODE</code> 基金code</p>
+<p><code class="notranslate">pageIndex</code> 页码 1 开始</p>
+<p><code class="notranslate">pageSize</code> 每页条数</p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+    <span class="pl-s">"RDATE"</span>: <span class="pl-s">"2022-04-03"</span><span class="pl-kos">,</span> <span class="pl-c">// 评级日期</span>
+    <span class="pl-s">"HTPJ"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span> <span class="pl-c">// </span>
+    <span class="pl-s">"ZSPJ"</span>: <span class="pl-s">"5"</span><span class="pl-kos">,</span> <span class="pl-c">// 招商证券</span>
+    <span class="pl-s">"SZPJ3"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span> <span class="pl-c">// 上海证券</span>
+    <span class="pl-s">"JAPJ"</span>: <span class="pl-s">""</span> <span class="pl-c">// 济安金信</span>
+  <span class="pl-kos">}</span><span class="pl-kos">]</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金涨幅</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMNPeriodIncrease</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">FCODE</code> 基金code</p>
+<p><code class="notranslate">RANGE</code> 范围</p>
+<ul>
+<li><code class="notranslate">'n'</code> 年度涨幅 3n表示3年</li>
+<li><code class="notranslate">'y'</code> 月度涨幅 3y表示3个月</li>
+<li>`` 不写为阶段涨幅</li>
+</ul>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+    <span class="pl-s">"title"</span>: <span class="pl-s">"2021年度"</span><span class="pl-kos">,</span> <span class="pl-c">// 具体周期 或者  Z 近一周  Y 近一月  3Y 近三月  6Y 近六月  1N 近1年  2N 近2年  3N 近3年  5N 近5年  JN 今年来  LN 成立来</span>
+    <span class="pl-s">"syl"</span>: <span class="pl-s">"43.7292"</span><span class="pl-kos">,</span> <span class="pl-c">// 涨跌幅%</span>
+    <span class="pl-s">"avg"</span>: <span class="pl-s">"7.90"</span><span class="pl-kos">,</span> <span class="pl-c">// 同类评价%</span>
+    <span class="pl-s">"hs300"</span>: <span class="pl-s">"-5.1986"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"rank"</span>: <span class="pl-s">"26"</span><span class="pl-kos">,</span> <span class="pl-c">// 同类排行</span>
+    <span class="pl-s">"sc"</span>: <span class="pl-s">"748"</span><span class="pl-kos">,</span> <span class="pl-c">// 同类数量</span>
+    <span class="pl-s">"diff"</span>: <span class="pl-c1">null</span>
+  <span class="pl-kos">}</span><span class="pl-kos">]</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金同类排名走势</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundRankDiagram</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">FCODE</code> 基金code</p>
+<p><code class="notranslate">RANGE</code> 范围</p>
+<ul>
+<li><code class="notranslate">'n'</code> 年度涨幅 3n表示3年</li>
+<li><code class="notranslate">'y'</code> 月度涨幅 3y表示3个月</li>
+<li>`` 不写为所有</li>
+</ul>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+    <span class="pl-s">"PDATE"</span>: <span class="pl-s">"2017-09-07"</span><span class="pl-kos">,</span> <span class="pl-c">// 日期</span>
+    <span class="pl-s">"QRANK"</span>: <span class="pl-s">"18"</span><span class="pl-kos">,</span> <span class="pl-c">// 同类排名</span>
+    <span class="pl-s">"QSC"</span>: <span class="pl-s">"230"</span> <span class="pl-c">// 同类数量</span>
+  <span class="pl-kos">}</span><span class="pl-kos">]</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金的基金经理</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMNMangerList</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">FCODE</code> 基金code</p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+    <span class="pl-s">"MGRID"</span>: <span class="pl-s">"30040539,30675033,30725205"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金经理id列表</span>
+    <span class="pl-s">"MGRNAME"</span>: <span class="pl-s">"周蔚文,罗佳明,刘伟伟"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金经理名字</span>
+    <span class="pl-s">"FCODE"</span>: <span class="pl-s">"004241"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金代码</span>
+    <span class="pl-s">"DAYS"</span>: <span class="pl-s">"158"</span><span class="pl-kos">,</span> <span class="pl-c">// 管理天数</span>
+    <span class="pl-s">"FEMPDATE"</span>: <span class="pl-s">"2021-12-17"</span><span class="pl-kos">,</span> <span class="pl-c">// 管理开始时间</span>
+    <span class="pl-s">"LEMPDATE"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span> <span class="pl-c">// 管理结束时间</span>
+    <span class="pl-s">"PENAVGROWTH"</span>: <span class="pl-s">"-26.0088"</span><span class="pl-kos">,</span> <span class="pl-c">// 任职回报</span>
+    <span class="pl-s">"NEWPHOTOURL"</span>: <span class="pl-s">"https://pdf.dfcfw.com/pdf/H8_30040539_1.JPG,https://pdf.dfcfw.com/pdf/H8_30675033_1.JPG,https://pdf.dfcfw.com/pdf/H8_30725205_1.PNG"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金经理头像</span>
+    <span class="pl-s">"ISINOFFICE"</span>: <span class="pl-s">"1,1,1"</span>
+  <span class="pl-kos">}</span><span class="pl-kos">]</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金累计收益</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundVPageAcc</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">FCODE</code> 基金code<br>
+<code class="notranslate">RANGE</code> 范围</p>
+<ul>
+<li><code class="notranslate">'n'</code> 年度涨幅 3n表示3年</li>
+<li><code class="notranslate">'y'</code> 月度涨幅 3y表示3个月</li>
+<li><code class="notranslate">jn</code> 近年来</li>
+<li><code class="notranslate">ln</code> 成立以来</li>
+</ul>
+<p><code class="notranslate">INDEXCODE</code> 对比的 如</p>
+<ul>
+<li>上证指数 000001</li>
+<li>深证成指 399001</li>
+<li>创业板指 399006</li>
+<li>沪深300 000300</li>
+<li>中小板指 399005</li>
+<li>中证500 000905</li>
+<li>中证500 000905</li>
+<li>上证50 000016</li>
+</ul>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+    <span class="pl-s">"PDATE"</span>: <span class="pl-s">"2022-05-25"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"YIELD"</span>: <span class="pl-s">"6.04"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1月</span>
+    <span class="pl-s">"INDEXYIELD"</span>: <span class="pl-s">"4.41"</span><span class="pl-kos">,</span>  <span class="pl-c">// 上面所选的对比</span>
+    <span class="pl-s">"FUNDTYPEYIELD"</span>: <span class="pl-s">"8.79"</span><span class="pl-kos">,</span>  <span class="pl-c">// 同类</span>
+    <span class="pl-s">"BENCHQUOTE"</span>: <span class="pl-c1">null</span> <span class="pl-c">// 业绩比较基准</span>
+  <span class="pl-kos">}</span><span class="pl-kos">]</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金净值</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundVPageDiagram</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">FCODE</code> 基金code<br>
+<code class="notranslate">RANGE</code> 范围</p>
+<ul>
+<li><code class="notranslate">'n'</code> 年度涨幅 3n表示3年</li>
+<li><code class="notranslate">'y'</code> 月度涨幅 3y表示3个月</li>
+<li><code class="notranslate">jn</code> 近年来</li>
+<li><code class="notranslate">ln</code> 成立以来</li>
+</ul>
+<p><code class="notranslate">POINTCOUNT</code> 点计数（未知作用） 传 500</p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+    <span class="pl-s">"FSRQ"</span>: <span class="pl-s">"2022-05-20"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"DWJZ"</span>: <span class="pl-s">"2.84"</span><span class="pl-kos">,</span> <span class="pl-c">// 单位净值</span>
+    <span class="pl-s">"JZZZL"</span>: <span class="pl-s">"1.57"</span><span class="pl-kos">,</span> <span class="pl-c">// 日涨幅</span>
+    <span class="pl-s">"LJJZ"</span>: <span class="pl-s">"2.84"</span><span class="pl-kos">,</span> <span class="pl-c">// 累计净值</span>
+    <span class="pl-s">"NAVTYPE"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"RATE"</span>: <span class="pl-s">"--"</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span><span class="pl-kos">]</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金净值估算（实时）</h3>
+<p>官方限制非指数类暂停基金净值估算展示。<br>
+<strong>路由</strong></p>
+<p><code class="notranslate">/fundVarietieValuationDetail</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">FCODE</code> 基金code</p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">[</span>
+    <span class="pl-s">"1,09:30,0.1284"</span><span class="pl-kos">,</span> <span class="pl-c">// 序号,时间，估算涨幅</span>
+  <span class="pl-kos">]</span>
+  "<span class="pl-v">Expansion</span><span class="pl-s">": {</span>
+<span class="pl-s">  "</span><span class="pl-c1">FCODE</span><span class="pl-s">": "</span><span class="pl-c1">003834</span><span class="pl-s">",</span>
+<span class="pl-s">  "</span><span class="pl-c1">SHORTNAME</span><span class="pl-s">": "</span><span class="pl-s1">华夏能源革新股票A</span><span class="pl-s">",</span>
+<span class="pl-s">  "</span><span class="pl-c1">GZTIME</span><span class="pl-s">": "</span><span class="pl-c1">2022</span><span class="pl-c1">-</span><span class="pl-c1">05</span><span class="pl-c1">-</span><span class="pl-c1">25</span> <span class="pl-c1">15</span>:<span class="pl-c1">00</span>"<span class="pl-kos">,</span>
+  <span class="pl-s">"GZ"</span>: <span class="pl-s">"3.1140"</span><span class="pl-kos">,</span> <span class="pl-c">// 估值</span>
+  <span class="pl-s">"GSZZL"</span>: <span class="pl-s">"0.61"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"GZZF"</span>: <span class="pl-s">"0.0190"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"SGZT"</span>: <span class="pl-s">"限大额"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"SHZT"</span>: <span class="pl-s">"开放赎回"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"SOURCERATE"</span>: <span class="pl-s">"1.50%"</span><span class="pl-kos">,</span> <span class="pl-c">// 优惠前费率</span>
+  <span class="pl-s">"rate"</span>: <span class="pl-s">"0.15%"</span><span class="pl-kos">,</span> <span class="pl-c">// 优惠后费率</span>
+  <span class="pl-s">"DTZT"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"ISBUY"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"JZRQ"</span>: <span class="pl-s">"2022-05-24"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"DWJZ"</span>: <span class="pl-s">"3.0950"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"BUY"</span>: <span class="pl-c1">true</span><span class="pl-kos">,</span>
+  <span class="pl-s">"Market"</span>: <span class="pl-s">"CN"</span>
+  <span class="pl-kos">}</span>
+  
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金历史净值</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMNHisNetList</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">FCODE</code> 基金code</p>
+<p><code class="notranslate">pageIndex</code>: 页码 1开始</p>
+<p><code class="notranslate">pagesize</code>: 每页条数</p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">[</span>
+    <span class="pl-kos">{</span>
+      <span class="pl-s">"FSRQ"</span>: <span class="pl-s">"2022-05-25"</span><span class="pl-kos">,</span> <span class="pl-c">// 日期</span>
+      <span class="pl-s">"DWJZ"</span>: <span class="pl-s">"3.1140"</span><span class="pl-kos">,</span> <span class="pl-c">// 单位净值</span>
+      <span class="pl-s">"JZZZL"</span>: <span class="pl-s">"0.61"</span><span class="pl-kos">,</span> <span class="pl-c">// 日涨幅%</span>
+      <span class="pl-s">"LJJZ"</span>: <span class="pl-s">"3.1140"</span><span class="pl-kos">,</span> <span class="pl-c">// 累计净值</span>
+      <span class="pl-s">"NAVTYPE"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"RATE"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"MUI"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SYI"</span>: <span class="pl-s">"--"</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">]</span>
+<span class="pl-kos">}</span></pre></div>
+<h2>基金公司</h2>
+<h3>获取基金公司基础信息(旗下基金和相关主题)</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/companyApi2</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">cc</code> 基金公司id</p>
+<p><code class="notranslate">action</code> <code class="notranslate">'fundcompanybaseinfo'</code></p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">// fundcompanybaseinfo</span>
+<span class="pl-kos">{</span>
+  <span class="pl-s">"code"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"GLGM"</span>: <span class="pl-s">"5161.31亿元"</span><span class="pl-kos">,</span> <span class="pl-c">// 管理规模</span>
+    <span class="pl-s">"Count"</span>: <span class="pl-s">"245"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金总数</span>
+    <span class="pl-s">"FDMC"</span>: <span class="pl-s">"中欧基金管理有限公司"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金公司名</span>
+    <span class="pl-s">"GSJJBName"</span>: <span class="pl-s">"中欧基金吧"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金吧（天天基金网）</span>
+    <span class="pl-s">"ManagerCount"</span>: <span class="pl-s">"39"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金经理人数</span>
+    <span class="pl-s">"fundmaxsyl"</span>: <span class="pl-c1">9.37</span><span class="pl-kos">,</span> <span class="pl-c">// 旗下基金仅1周最高涨幅%</span>
+    <span class="pl-s">"NewFundList"</span>:<span class="pl-kos">[</span> <span class="pl-c">// 旗下基金列表</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-s">"TypeName"</span>: <span class="pl-s">"新发基金"</span><span class="pl-kos">,</span> <span class="pl-c">// 类型</span>
+        <span class="pl-s">"TypeCount"</span>: <span class="pl-s">"2"</span><span class="pl-kos">,</span> <span class="pl-c">// 数量</span>
+        <span class="pl-s">"Filds"</span>: <span class="pl-s">"基金名称,最新净值,日涨幅"</span><span class="pl-kos">,</span> <span class="pl-c">// 字段</span>
+        <span class="pl-s">"fundlist"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+          <span class="pl-s">"FCODE"</span>: <span class="pl-s">"014474"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金代码</span>
+          <span class="pl-s">"FULLNAME"</span>: <span class="pl-s">"中欧安悦一年定期开放债券型发起式证券投资基金"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金全名</span>
+          <span class="pl-s">"SHORTNAME"</span>: <span class="pl-s">"中欧安悦一年定开债券发起"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金名</span>
+          <span class="pl-s">"ISSBDATE"</span>: <span class="pl-s">"2022-05-20 00:00:00"</span><span class="pl-kos">,</span> <span class="pl-c">// 集中认购期开始日期</span>
+          <span class="pl-s">"RGBEGIN"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+          <span class="pl-s">"ISSEDATE"</span>: <span class="pl-s">"2022-08-19 15:00:00"</span><span class="pl-kos">,</span> <span class="pl-c">// 集中认购期结束日期</span>
+          <span class="pl-s">"RGEND"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+          <span class="pl-s">"RGDATE"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span>
+          <span class="pl-s">"FUNDTYPE"</span>: <span class="pl-s">"008"</span><span class="pl-kos">,</span>
+          <span class="pl-s">"MINSG"</span>: <span class="pl-s">"10.0"</span><span class="pl-kos">,</span> <span class="pl-c">// 起购价</span>
+          <span class="pl-s">"FSRQ"</span>: <span class="pl-s">"2022-05-23"</span><span class="pl-kos">,</span> <span class="pl-c">// 数据时间</span>
+          <span class="pl-s">"DWJZ"</span>: <span class="pl-s">"1.9845"</span><span class="pl-kos">,</span> <span class="pl-c">// 最近净值（万份收益）</span>
+          <span class="pl-s">"RZDF"</span>: <span class="pl-s">"0.68"</span><span class="pl-kos">,</span> <span class="pl-c">// 日涨幅</span>
+          <span class="pl-s">"SYL_Z"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+          <span class="pl-s">"LJJZ"</span>: <span class="pl-s">"2.161"</span><span class="pl-kos">,</span> <span class="pl-c">// 7日年化</span>
+          <span class="pl-s">"SYL_1N"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+          <span class="pl-s">"SYL_3Y"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+          <span class="pl-s">"FEATURE"</span>: <span class="pl-s">"041,071,080"</span><span class="pl-kos">,</span>
+          <span class="pl-s">"FTYPE"</span>: <span class="pl-s">"债券型-长债"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金类型</span>
+          <span class="pl-s">"ISBUY"</span>: <span class="pl-s">""</span> <span class="pl-c">// 是否可购买</span>
+        <span class="pl-kos">}</span><span class="pl-kos">]</span>
+      <span class="pl-kos">}</span>
+    <span class="pl-kos">]</span>
+    "<span class="pl-v">CompanyTopic</span>": <span class="pl-kos">{</span> <span class="pl-c">// 相关主题</span>
+      "<span class="pl-v">MaxSYL</span>": <span class="pl-c1">38.7802</span><span class="pl-kos">,</span>
+      <span class="pl-s">"MinSYL"</span>: <span class="pl-c1">-</span><span class="pl-c1">14.9017</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AvgSYL"</span>: <span class="pl-c1">-</span><span class="pl-c1">4.5434</span><span class="pl-kos">,</span>
+      <span class="pl-s">"List"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+        <span class="pl-s">"JJGSID"</span>: <span class="pl-s">"80065113"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"TTYPE"</span>: <span class="pl-s">"97c97c61c8537bec"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"TTYPENAME"</span>: <span class="pl-s">"昨日触板"</span><span class="pl-kos">,</span> <span class="pl-c">// 主题名</span>
+        <span class="pl-s">"PDATE"</span>: <span class="pl-s">"2020-10-09"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"D"</span>: <span class="pl-s">"3.0825"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"W"</span>: <span class="pl-s">"3.0825"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"M"</span>: <span class="pl-s">"6.0612"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"Q"</span>: <span class="pl-s">"2.7567"</span><span class="pl-kos">,</span> <span class="pl-c">// 季度涨幅（近3月）</span>
+        <span class="pl-s">"HY"</span>: <span class="pl-s">"38.7802"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"Y"</span>: <span class="pl-s">"64.2868"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"TWY"</span>: <span class="pl-s">"112.1482"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"TRY"</span>: <span class="pl-s">"80.0929"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"FY"</span>: <span class="pl-s">"99.6487"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"SY"</span>: <span class="pl-s">"48.1734"</span>
+      <span class="pl-kos">}</span><span class="pl-kos">]</span>
+    <span class="pl-kos">}</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金公司基础信息(旗下基金列表)</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/companyApi2</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">cc</code> 基金公司id</p>
+<p><code class="notranslate">action</code> <code class="notranslate">'fundlist'</code><br>
+<code class="notranslate">fundtype</code> 类型</p>
+<ul>
+<li>all 全部</li>
+<li>1 股票</li>
+<li>2 混合</li>
+<li>3 债券</li>
+<li>4 理财</li>
+<li>5 货币</li>
+<li>7 QDLL</li>
+<li>8 指数</li>
+</ul>
+<p><code class="notranslate">pi</code> 页数</p>
+<p><code class="notranslate">ps</code> 数量</p>
+<p><code class="notranslate">sd</code> 排序 <code class="notranslate">desc</code></p>
+<p><code class="notranslate">sf</code></p>
+<ul>
+<li>SYL_Z 周 SYL_3Z 3个周</li>
+<li>SYL_Y 月 SYL_3Y 3个月</li>
+<li>SYL_1N 年 近1年</li>
+<li>SYL_JN 今年来</li>
+<li>SYL_LN 成立来</li>
+<li>LJJZ 7日（fundtype 4，,5）</li>
+<li>FTYI 14日</li>
+<li>TFYI 35日</li>
+</ul>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"code"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+    <span class="pl-s">"FCODE"</span>: <span class="pl-s">"015387"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金代码</span>
+    <span class="pl-s">"FEATURE"</span>: <span class="pl-s">"050,052,053,701"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"FUNDTYPE"</span>: <span class="pl-s">"001"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"FULLNAME"</span>: <span class="pl-s">"中欧沪深300指数增强型证券投资基金"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金全名</span>
+    <span class="pl-s">"SHORTNAME"</span>: <span class="pl-s">"中欧沪深300指数增强A"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金名</span>
+    <span class="pl-s">"JJGSID"</span>: <span class="pl-s">"80065113"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"DWJZ"</span>: <span class="pl-c1">0.9741</span><span class="pl-kos">,</span> <span class="pl-c">// 最新净值（万份收益）</span>
+    <span class="pl-s">"LJJZ"</span>: <span class="pl-c1">0.9741</span><span class="pl-kos">,</span> <span class="pl-c">// sf</span>
+    <span class="pl-s">"FTYI"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-c">// sf</span>
+    <span class="pl-s">"TEYI"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-c">// sf</span>
+    <span class="pl-s">"TFYI"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-c">// sf</span>
+    <span class="pl-s">"SYL_D"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-c">// sf</span>
+    <span class="pl-s">"SYL_Z"</span>: <span class="pl-c1">1.54</span><span class="pl-kos">,</span> <span class="pl-c">// sf</span>
+    <span class="pl-s">"SYL_Y"</span>: <span class="pl-c1">-</span><span class="pl-c1">2.43</span><span class="pl-kos">,</span> <span class="pl-c">// sf</span>
+    <span class="pl-s">"SYL_3Y"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-c">// sf</span>
+    <span class="pl-s">"SYL_6Y"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-c">// sf</span>
+    <span class="pl-s">"SYL_1N"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-c">// sf</span>
+    <span class="pl-s">"SYL_2N"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-c">// sf</span>
+    <span class="pl-s">"SYL_3N"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-c">// sf</span>
+    <span class="pl-s">"SYL_JN"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-c">// sf</span>
+    <span class="pl-s">"SYL_LN"</span>: <span class="pl-c1">-</span><span class="pl-c1">2.59</span> <span class="pl-c">// sf</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span><span class="pl-kos"></span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金公司基础信息(旗下基金分类)</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/companyApi2</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">cc</code> 基金公司id</p>
+<p><code class="notranslate">action</code> <code class="notranslate">'categoryoffund'</code><br>
+<code class="notranslate">ftype</code> 类型</p>
+<ul>
+<li>25 股票</li>
+<li>27 混合</li>
+<li>31 债券</li>
+<li>35 货币</li>
+<li>37 QDLL</li>
+<li>11 指数</li>
+</ul>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"code"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"Info"</span>: <span class="pl-kos">{</span>
+      <span class="pl-s">"JJGSID"</span>: <span class="pl-s">"80065113"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FUNDTYPE"</span>: <span class="pl-s">"25"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"GSJJBID"</span>: <span class="pl-s">"65.0"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FNAME"</span>: <span class="pl-s">"中欧基金管理有限公司"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SNAME"</span>: <span class="pl-s">"中欧基金"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FUNDCOUNT"</span>: <span class="pl-c1">18</span><span class="pl-kos">,</span> <span class="pl-c">// 旗下此类型基金数量</span>
+      <span class="pl-s">"TOTALSCALE"</span>: <span class="pl-c1">395.36</span><span class="pl-kos">,</span> <span class="pl-c">// 旗下此类型基金规模</span>
+      <span class="pl-s">"CEO"</span>: <span class="pl-s">"刘建平"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"ESTABDATE"</span>: <span class="pl-s">"2006-07-19"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"RDATE"</span>: <span class="pl-s">"2022-05-06"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"COUNTRANK"</span>: <span class="pl-c1">34</span><span class="pl-kos">,</span> <span class="pl-c">// 旗下此类型基金数量同类排名</span>
+      <span class="pl-s">"SCALERANK"</span>: <span class="pl-c1">16</span><span class="pl-kos">,</span> <span class="pl-c">// 旗下此类型基金规模同类排名</span>
+      <span class="pl-s">"FUNDSC"</span>: <span class="pl-c1">122</span> <span class="pl-c">// 同类基金总数量</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-s">"CompanyPartYield"</span>: <span class="pl-kos">{</span>
+      <span class="pl-s">"JJGSID"</span>: <span class="pl-s">"80065113"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"M"</span>: <span class="pl-c1">4.1054</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_6YRANK"</span>: <span class="pl-c1">120</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SN_3N"</span>: <span class="pl-s">"中欧先进制造股票A"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"W_DZ"</span>: <span class="pl-c1">2.4629</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_JNRANK"</span>: <span class="pl-c1">119</span><span class="pl-kos">,</span> <span class="pl-c">// 同类排名</span>
+      <span class="pl-s">"AVG_ZSC"</span>: <span class="pl-c1">122</span><span class="pl-kos">,</span> <span class="pl-c">// 同类总数</span>
+      <span class="pl-s">"SN_5N"</span>: <span class="pl-s">"中欧时代先锋股票A"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FCODE_5N"</span>: <span class="pl-s">"001938"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FCODE_Y"</span>: <span class="pl-s">"004812"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FCODE_3N"</span>: <span class="pl-s">"004812"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FY"</span>: <span class="pl-c1">53.2611</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FCODE_1N"</span>: <span class="pl-s">"004812"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SYL_Y"</span>: <span class="pl-c1">18.22</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_3YRANK"</span>: <span class="pl-c1">112</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SYL_Z"</span>: <span class="pl-c1">8.49</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SN_Y"</span>: <span class="pl-s">"中欧先进制造股票A"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_5NSC"</span>: <span class="pl-c1">122</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SY_DZ"</span>: <span class="pl-c1">-</span><span class="pl-c1">17.9418</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_5NRANK"</span>: <span class="pl-c1">4</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_2NRANK"</span>: <span class="pl-c1">46</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_3YSC"</span>: <span class="pl-c1">122</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_3NRANK"</span>: <span class="pl-c1">12</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SN_6Y"</span>: <span class="pl-s">"中欧先进制造股票A"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"HY_DZ"</span>: <span class="pl-c1">-</span><span class="pl-c1">17.4904</span><span class="pl-kos">,</span>
+      <span class="pl-s">"TRY_DZ"</span>: <span class="pl-c1">13.1145</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_Y"</span>: <span class="pl-c1">4.1675</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_Z"</span>: <span class="pl-c1">2.8189</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_2N"</span>: <span class="pl-c1">25.2792</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_YRANK"</span>: <span class="pl-c1">57</span><span class="pl-kos">,</span>
+      <span class="pl-s">"HY"</span>: <span class="pl-c1">-</span><span class="pl-c1">18.6928</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SYL_5N"</span>: <span class="pl-c1">132.14</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FCODE_6Y"</span>: <span class="pl-s">"004812"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_JN"</span>: <span class="pl-c1">-</span><span class="pl-c1">25.215</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_1NSC"</span>: <span class="pl-c1">122</span><span class="pl-kos">,</span>
+      <span class="pl-s">"Y_DZ"</span>: <span class="pl-c1">-</span><span class="pl-c1">21.0389</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FCODE_3Y"</span>: <span class="pl-s">"004812"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"M_DZ"</span>: <span class="pl-c1">1.015</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FUNDTYPE"</span>: <span class="pl-s">"25"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SYL_6Y"</span>: <span class="pl-c1">-</span><span class="pl-c1">23.15</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_JNSC"</span>: <span class="pl-c1">122</span><span class="pl-kos">,</span>
+      <span class="pl-s">"W"</span>: <span class="pl-c1">2.8856</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SYL_3Y"</span>: <span class="pl-c1">-</span><span class="pl-c1">6.69</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SN_2N"</span>: <span class="pl-s">"中欧先进制造股票A"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"TRY"</span>: <span class="pl-c1">51.7916</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_5N"</span>: <span class="pl-c1">114.025</span><span class="pl-kos">,</span>
+      <span class="pl-s">"Y"</span>: <span class="pl-c1">-</span><span class="pl-c1">12.6947</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_YSC"</span>: <span class="pl-c1">122</span><span class="pl-kos">,</span>
+      <span class="pl-s">"TWY_DZ"</span>: <span class="pl-c1">6.0124</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_ZRANK"</span>: <span class="pl-c1">60</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FCODE_JN"</span>: <span class="pl-s">"004812"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"_id"</span>: <span class="pl-s">"8006511325"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_1N"</span>: <span class="pl-c1">-</span><span class="pl-c1">19.9692</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SN_1N"</span>: <span class="pl-s">"中欧先进制造股票A"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_3N"</span>: <span class="pl-c1">87.8433</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FY_DZ"</span>: <span class="pl-c1">18.3923</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SY"</span>: <span class="pl-c1">-</span><span class="pl-c1">18.191</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_2NSC"</span>: <span class="pl-c1">122</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_6Y"</span>: <span class="pl-c1">-</span><span class="pl-c1">27.0425</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_1NRANK"</span>: <span class="pl-c1">102</span><span class="pl-kos">,</span>
+      <span class="pl-s">"Q"</span>: <span class="pl-c1">-</span><span class="pl-c1">11.9119</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_3Y"</span>: <span class="pl-c1">-</span><span class="pl-c1">14.2967</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FCODE_Z"</span>: <span class="pl-s">"004812"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_3NSC"</span>: <span class="pl-c1">122</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SYL_1N"</span>: <span class="pl-c1">13.23</span><span class="pl-kos">,</span>
+      <span class="pl-s">"FCODE_2N"</span>: <span class="pl-s">"004812"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SYL_2N"</span>: <span class="pl-c1">128.4</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SYL_3N"</span>: <span class="pl-c1">226.54</span><span class="pl-kos">,</span>
+      <span class="pl-s">"Q_DZ"</span>: <span class="pl-c1">-</span><span class="pl-c1">12.3093</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SYL_JN"</span>: <span class="pl-c1">-</span><span class="pl-c1">16.51</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SN_JN"</span>: <span class="pl-s">"中欧先进制造股票A"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"AVG_6YSC"</span>: <span class="pl-c1">122</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SN_Z"</span>: <span class="pl-s">"中欧先进制造股票A"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"SN_3Y"</span>: <span class="pl-s">"中欧先进制造股票A"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"TWY"</span>: <span class="pl-c1">23.5033</span>
+    <span class="pl-kos">}</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金公司基础信息(基本情况)</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/companyApi2</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">cc</code> 基金公司id</p>
+<p><code class="notranslate">action</code> <code class="notranslate">'companyarchives'</code></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"code"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"Datas2"</span>: <span class="pl-kos">{</span>
+      <span class="pl-s">"c_time"</span>: <span class="pl-kos">[</span>
+        <span class="pl-s">"2021/06/30"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"2021/09/30"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"2021/12/31"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"2022/03/31"</span>
+      <span class="pl-kos">]</span><span class="pl-kos">,</span>
+      <span class="pl-s">"c_data"</span>: <span class="pl-kos">[</span>
+        <span class="pl-c1">5084.75</span><span class="pl-kos">,</span>
+        <span class="pl-c1">5269.82</span><span class="pl-kos">,</span>
+        <span class="pl-c1">5673.75</span><span class="pl-kos">,</span>
+        <span class="pl-c1">5083.33</span>
+      <span class="pl-kos">]</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-s">"FDMC"</span>: <span class="pl-s">"中欧基金管理有限公司"</span><span class="pl-kos">,</span> <span class="pl-c">// 法定名称</span>
+    <span class="pl-s">"CLRQ"</span>: <span class="pl-s">"2006-07-19"</span><span class="pl-kos">,</span> <span class="pl-c">// 成立时间</span>
+    <span class="pl-s">"ZCZB"</span>: <span class="pl-s">"22000(万元)"</span><span class="pl-kos">,</span> <span class="pl-c">// 注册资本</span>
+    <span class="pl-s">"FRDB"</span>: <span class="pl-s">"窦玉明"</span><span class="pl-kos">,</span> <span class="pl-c">// 法人代表</span>
+    <span class="pl-s">"Manager"</span>: <span class="pl-s">"刘建平"</span><span class="pl-kos">,</span> <span class="pl-c">// 总经理</span>
+    <span class="pl-s">"ZCDZ"</span>: <span class="pl-s">"中国(上海)自由贸易试验区陆家嘴环路479号8层"</span><span class="pl-kos">,</span> <span class="pl-c">// 注册地址</span>
+    <span class="pl-s">"BGDZ"</span>: <span class="pl-s">"中国(上海)自由贸易试验区陆家嘴环路479号上海中心大厦8层"</span><span class="pl-kos">,</span> <span class="pl-c">// 办公室地址</span>
+    <span class="pl-s">"KFRX"</span>: <span class="pl-s">"021-68609700,400-700-9700"</span><span class="pl-kos">,</span> <span class="pl-c">// 客服热线</span>
+    <span class="pl-s">"GLGM"</span>: <span class="pl-s">"5161.31亿元"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金规模</span>
+    <span class="pl-s">"Count"</span>: <span class="pl-s">"245"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金总数</span>
+    <span class="pl-s">"ManagerCount"</span>: <span class="pl-s">"39"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金经理人数</span>
+    <span class="pl-s">"Level"</span>: <span class="pl-s">"基金管理业务、包括依中国法律从事证券投资基金的设立和管理、基金管理和与此相关的其他业务。"</span> <span class="pl-c">// 经营范围</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金公司基础信息(规模变动)</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/companyApi2</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">cc</code> 基金公司id</p>
+<p><code class="notranslate">action</code> <code class="notranslate">'companygmbd'</code></p>
+<p><code class="notranslate">pi</code> 页数</p>
+<p><code class="notranslate">ps</code> 数量</p>
+<p><code class="notranslate">sd</code> 排序 <code class="notranslate">desc</code></p>
+<p><code class="notranslate">sf</code> FSRQ</p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"code"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>:
+  <span class="pl-kos">{</span>
+    <span class="pl-s">"Datas"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+      <span class="pl-s">"FSRQ"</span>: <span class="pl-s">"2022-03-31"</span><span class="pl-kos">,</span> <span class="pl-c">// 报告期</span>
+      <span class="pl-s">"QMZFE"</span>: <span class="pl-s">"403299550140.32"</span><span class="pl-kos">,</span> <span class="pl-c">// 总份额（亿元）</span>
+      <span class="pl-s">"QMJZC"</span>: <span class="pl-s">"508333387806.35"</span> <span class="pl-c">// 净资产（亿元）</span>
+    <span class="pl-kos">}</span><span class="pl-kos">]</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<h2>基金经理</h2>
+<h3>获取基金经理信息</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMSNMangerInfo</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">FCODE</code> 基金经理id</p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"MGRID"</span>: <span class="pl-s">"30185328"</span><span class="pl-kos">,</span> <span class="pl-c">// 经理id</span>
+    <span class="pl-s">"MGRNAME"</span>: <span class="pl-s">"马君"</span><span class="pl-kos">,</span> <span class="pl-c">// 姓名</span>
+    <span class="pl-s">"RESUME"</span>: <span class="pl-s">"xxxx"</span><span class="pl-kos">,</span> <span class="pl-c">// 简介</span>
+    <span class="pl-s">"INVESTMENTMETHOD"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"INVESTMENTIDEAR"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"TOTALDAYS"</span>: <span class="pl-s">"3553"</span><span class="pl-kos">,</span> <span class="pl-c">// 从业时间（天数）</span>
+    <span class="pl-s">"NETNAV"</span>: <span class="pl-s">"7802520538.55"</span><span class="pl-kos">,</span> <span class="pl-c">// 管理规模（元）</span>
+    <span class="pl-s">"FCOUNT"</span>: <span class="pl-s">"17"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"TCOUNT"</span>: <span class="pl-s">"34"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"PRECODE"</span>: <span class="pl-s">"005237"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"PRENAME"</span>: <span class="pl-s">"银华医疗健康量化优选A"</span><span class="pl-kos">,</span> <span class="pl-c">// 代表作品</span>
+    <span class="pl-s">"AWARDNUM"</span>: <span class="pl-s">"0"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"ISWXPJ"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"PF_3"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"YJ_3"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"MAXPENAVGROWTH"</span>: <span class="pl-s">"45.5454"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"YIELDSE"</span>: <span class="pl-s">"-5.6634"</span><span class="pl-kos">,</span> <span class="pl-c">// 年化回报%</span>
+    <span class="pl-s">"JJGS"</span>: <span class="pl-s">"银华基金"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"JJGSID"</span>: <span class="pl-s">"80000235"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"NEWPHOTOURL"</span>: <span class="pl-s">"https://pdf.dfcfw.com/pdf/H8_30185328_1.JPG"</span><span class="pl-kos">,</span> <span class="pl-c">// 头像</span>
+    <span class="pl-s">"MFTYPE"</span>: <span class="pl-s">"3"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"AWARDNUM_JN"</span>: <span class="pl-s">"0"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"AWARDNUM_MX"</span>: <span class="pl-s">"0"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"AWARDFNUM"</span>: <span class="pl-s">"0"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"FCODE"</span>: <span class="pl-s">"005035,005036,005237,005238,005260,005261,008889,010524,012928,012929,015761,015762,159822,159827,159842,159992,159994"</span><span class="pl-kos">,</span> <span class="pl-c">// 在管基金代码</span>
+    <span class="pl-s">"SHORTNAME"</span>: <span class="pl-s">"银华工银南方东英标普中国新经济ETF(QDII),银华稳健增利灵活配置混合A,银华稳健增利灵活配置混合C,银华信息科技量化股票发起式A,银华信息科技量化股票发起式C,银华医疗健康量化优选A,银华医疗健康量化优选C,银华中证5G通信主题ETF,银华中证5G通信主题ETF联接A,银华中证5G通信主题ETF联接C,银华中证创新药产业ETF,银华中证光伏ETF发起式联接A,银华中证光伏ETF发起式联接C,银华中证基建ETF发起式联接A,银华中证基建ETF发起式联接C,银华中证农业主题ETF,银华中证全指证券公司ETF"</span><span class="pl-kos">,</span> <span class="pl-c">// 在管基金名</span>
+    <span class="pl-s">"MAXRETRA1"</span>: <span class="pl-s">"0.8565"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"MAXEARN1"</span>: <span class="pl-s">"2.735"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"FMAXEARN1"</span>: <span class="pl-s">"1.2929"</span><span class="pl-kos">,</span> <span class="pl-c">// 最大盈利 129.29%</span>
+    <span class="pl-s">"FMAXRETRA1"</span>: <span class="pl-s">"0.5822"</span><span class="pl-kos">,</span> <span class="pl-c">// 最大回撤 58.22%</span>
+    <span class="pl-s">"SEX"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"WINS"</span>: <span class="pl-kos">[</span><span class="pl-kos">]</span><span class="pl-kos">,</span>
+    <span class="pl-s">"MGOLD"</span>: <span class="pl-s">"8.29"</span><span class="pl-kos">,</span> <span class="pl-c">//  业绩评分-综合 （*10）</span>
+    <span class="pl-s">"SDAY"</span>: <span class="pl-s">"9.37"</span><span class="pl-kos">,</span> <span class="pl-c">// 业绩评分-经验值 （*10）</span>
+    <span class="pl-s">"SCT1"</span>: <span class="pl-s">"8.98"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"SSTD1"</span>: <span class="pl-s">"6.02"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"SRT1"</span>: <span class="pl-s">"6.48"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"SY1"</span>: <span class="pl-s">"6.37"</span><span class="pl-kos">,</span><span class="pl-c">// 业绩评分-收益率 （*10）</span>
+    <span class="pl-s">"SINFO1"</span>: <span class="pl-s">"7.49"</span><span class="pl-kos">,</span> <span class="pl-c">// 业绩评分-超额收益 （*10）</span>
+    <span class="pl-s">"STRK1"</span>: <span class="pl-s">"9.17"</span><span class="pl-kos">,</span> <span class="pl-c">// 业绩评分-跟踪误差 （*10）</span>
+    <span class="pl-s">"SNAV"</span>: <span class="pl-s">"8.64"</span><span class="pl-kos">,</span> <span class="pl-c">// 业绩评分-管理规模 （*10）</span>
+    <span class="pl-s">"SGR"</span>: <span class="pl-s">"--"</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金经理业绩走势</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMSNMangerAcc</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">mGRID</code> 基金经理id</p>
+<p><code class="notranslate">rANGE</code> 范围</p>
+<ul>
+<li>n 年 3n</li>
+<li>y 月 3y</li>
+<li>ln 任职起</li>
+</ul>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+    <span class="pl-s">"SYI"</span>: <span class="pl-s">"-0.11"</span><span class="pl-kos">,</span> <span class="pl-c">// 经理数据%</span>
+    <span class="pl-s">"AVGSYI"</span>: <span class="pl-s">"0.01"</span><span class="pl-kos">,</span> <span class="pl-c">// 同类平均</span>
+    <span class="pl-s">"INDEXSYI"</span>: <span class="pl-s">"-0.08"</span><span class="pl-kos">,</span> <span class="pl-c">// 沪深300</span>
+    <span class="pl-s">"PDATE"</span>: <span class="pl-s">"2021-12-02"</span> <span class="pl-c">// 日期</span>
+  <span class="pl-kos">}</span><span class="pl-kos">]</span><span class="pl-kos">,</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金经理业绩排行</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMSNMangerPerRank</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">mGRID</code> 基金经理id</p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"MFTYPE"</span>: <span class="pl-s">"3"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"W"</span>: <span class="pl-s">"-1.81"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1周-涨跌幅</span>
+    <span class="pl-s">"M"</span>: <span class="pl-s">"8.31"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1月-涨跌幅</span>
+    <span class="pl-s">"Q"</span>: <span class="pl-s">"-13.22"</span><span class="pl-kos">,</span> <span class="pl-c">// 近3月-涨跌幅</span>
+    <span class="pl-s">"HY"</span>: <span class="pl-s">"-20.83"</span><span class="pl-kos">,</span> <span class="pl-c">// 近6月-涨跌幅</span>
+    <span class="pl-s">"Y"</span>: <span class="pl-s">"-18.43"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1年-涨跌幅</span>
+    <span class="pl-s">"TWY"</span>: <span class="pl-s">"-5.20"</span><span class="pl-kos">,</span> <span class="pl-c">// 近2年-涨跌幅</span>
+    <span class="pl-s">"TRY"</span>: <span class="pl-s">"-15.70"</span><span class="pl-kos">,</span> <span class="pl-c">// 近3年-涨跌幅</span>
+    <span class="pl-s">"FY"</span>: <span class="pl-s">"-24.00"</span><span class="pl-kos">,</span> <span class="pl-c">// 近5年-涨跌幅</span>
+    <span class="pl-s">"SY"</span>: <span class="pl-s">"-23.11"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"SE"</span>: <span class="pl-s">"-43.30"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"WRANK"</span>: <span class="pl-s">"143"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1周-同类排行</span>
+    <span class="pl-s">"WSC"</span>: <span class="pl-s">"237"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1周-同类总数</span>
+    <span class="pl-s">"MRANK"</span>: <span class="pl-s">"26"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1月-同类排行</span>
+    <span class="pl-s">"MSC"</span>: <span class="pl-s">"238"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1月-同类总数</span>
+    <span class="pl-s">"QRANK"</span>: <span class="pl-s">"155"</span><span class="pl-kos">,</span> <span class="pl-c">// 近3月-同类排行</span>
+    <span class="pl-s">"QSC"</span>: <span class="pl-s">"235"</span><span class="pl-kos">,</span> <span class="pl-c">// 近3月-同类总数</span>
+    <span class="pl-s">"HYRANK"</span>: <span class="pl-s">"154"</span><span class="pl-kos">,</span> <span class="pl-c">// 近6月-同类排行</span>
+    <span class="pl-s">"HYSC"</span>: <span class="pl-s">"221"</span><span class="pl-kos">,</span> <span class="pl-c">// 近6月-同类总数</span>
+    <span class="pl-s">"YRANK"</span>: <span class="pl-s">"115"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1年-同类排行</span>
+    <span class="pl-s">"YSC"</span>: <span class="pl-s">"201"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1年-同类总数</span>
+    <span class="pl-s">"TWYRANK"</span>: <span class="pl-s">"150"</span><span class="pl-kos">,</span> <span class="pl-c">// 近2年-同类排行</span>
+    <span class="pl-s">"TWYSC"</span>: <span class="pl-s">"162"</span><span class="pl-kos">,</span><span class="pl-c">// 近2年-同类总数</span>
+    <span class="pl-s">"TRYRANK"</span>: <span class="pl-s">"127"</span><span class="pl-kos">,</span> <span class="pl-c">// 近3年-同类排行</span>
+    <span class="pl-s">"TRYSC"</span>: <span class="pl-s">"130"</span><span class="pl-kos">,</span><span class="pl-c">// 近3年-同类总数</span>
+    <span class="pl-s">"FYRANK"</span>: <span class="pl-s">"95"</span><span class="pl-kos">,</span> <span class="pl-c">// 近5年-同类排行</span>
+    <span class="pl-s">"FYSC"</span>: <span class="pl-s">"97"</span><span class="pl-kos">,</span><span class="pl-c">// 近5年-同类总数</span>
+    <span class="pl-s">"SYRANK"</span>: <span class="pl-s">"186"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"SYSC"</span>: <span class="pl-s">"225"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"I_W"</span>: <span class="pl-s">"-1.72"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1周-同类平均</span>
+    <span class="pl-s">"I_M"</span>: <span class="pl-s">"5.21"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1月-同类平均</span>
+    <span class="pl-s">"I_Q"</span>: <span class="pl-s">"-12.58"</span><span class="pl-kos">,</span> <span class="pl-c">// 近3月-同类平均</span>
+    <span class="pl-s">"I_HY"</span>: <span class="pl-s">"-18.57"</span><span class="pl-kos">,</span> <span class="pl-c">// 近6月-同类平均</span>
+    <span class="pl-s">"I_Y"</span>: <span class="pl-s">"-17.38"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1年-同类平均</span>
+    <span class="pl-s">"I_TWY"</span>: <span class="pl-s">"14.98"</span><span class="pl-kos">,</span> <span class="pl-c">// 近2年-同类平均</span>
+    <span class="pl-s">"I_TRY"</span>: <span class="pl-s">"29.76"</span><span class="pl-kos">,</span> <span class="pl-c">// 近3年-同类平均</span>
+    <span class="pl-s">"I_FY"</span>: <span class="pl-s">"28.14"</span><span class="pl-kos">,</span> <span class="pl-c">// 近5年-同类平均</span>
+    <span class="pl-s">"I_SY"</span>: <span class="pl-s">"-19.00"</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金经理业绩评价</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMSNMangerPerEval</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">mGRID</code> 基金经理id</p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"MAXRETRA_1"</span>: <span class="pl-s">"0.2757"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1年 最大回撤 27.57%</span>
+    <span class="pl-s">"MAXRETRA_3"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span> <span class="pl-c">// 近3年 最大回撤</span>
+    <span class="pl-s">"HCPCT_1"</span>: <span class="pl-s">"4"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"HCPCT_3"</span>: <span class="pl-s">"2"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"MAXRETRHCPCT_3A_3"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"SHARP_1"</span>: <span class="pl-s">"1.0413"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1年 夏普比率 1.0413</span>
+    <span class="pl-s">"SHARP_3"</span>: <span class="pl-s">"0.4298"</span><span class="pl-kos">,</span> <span class="pl-c">// 近3年 夏普比率 0.4298</span>
+    <span class="pl-s">"XPPCT_1"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"XPPCT_3"</span>: <span class="pl-s">"3"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"STDDEV_1"</span>: <span class="pl-s">"23.8601"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1年 波动率 23.8601%</span>
+    <span class="pl-s">"STDDEV_3"</span>: <span class="pl-s">"24.2654"</span><span class="pl-kos">,</span> <span class="pl-c">// 近3年 波动率 24.2654%</span>
+    <span class="pl-s">"BDPCT_1"</span>: <span class="pl-s">"4"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"BDPCT_3"</span>: <span class="pl-s">"4"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"WIN_1"</span>: <span class="pl-s">"45.28"</span><span class="pl-kos">,</span> <span class="pl-c">// 近1年 超额胜率 45.28%</span>
+    <span class="pl-s">"WIN_3"</span>: <span class="pl-s">"56.57"</span><span class="pl-kos">,</span> <span class="pl-c">// 近3年 超额胜率 56.57%</span>
+    <span class="pl-s">"WINPCT_1"</span>: <span class="pl-s">"4"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"WINPCT_3"</span>: <span class="pl-s">"4"</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金经理风格</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMSNMangerPosMark</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">mGRID</code> 基金经理id</p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"Pos"</span>: <span class="pl-kos">[</span> <span class="pl-c">// 十大重仓股</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-s">"GPDM"</span>: <span class="pl-s">"600104"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"GPJC"</span>: <span class="pl-s">"上汽集团"</span><span class="pl-kos">,</span> <span class="pl-c">// 股票名称</span>
+        <span class="pl-s">"NEWTEXCH"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"JZBL"</span>: <span class="pl-s">"16.73"</span><span class="pl-kos">,</span> <span class="pl-c">// 持仓占比 16.73%</span>
+        <span class="pl-s">"INDEXNAME"</span>: <span class="pl-s">"汽车"</span><span class="pl-kos">,</span> <span class="pl-c">// 股票主题</span>
+        <span class="pl-s">"INDEXCODE"</span>: <span class="pl-s">"029006"</span><span class="pl-kos">,</span> <span class="pl-c">// 股票主题code</span>
+        <span class="pl-s">"PCTNVCHG"</span>: <span class="pl-s">"1.16"</span> <span class="pl-c">// 较上期</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">]</span><span class="pl-kos">,</span>
+    <span class="pl-s">"PosDate"</span>: <span class="pl-s">"2022-03-31"</span><span class="pl-kos">,</span> <span class="pl-c">// 十大重仓股更新时间</span>
+    <span class="pl-s">"Style"</span>: <span class="pl-kos">{</span> <span class="pl-c">// 持仓偏好</span>
+      <span class="pl-s">"FSCALE"</span>: <span class="pl-s">"01"</span><span class="pl-kos">,</span> <span class="pl-c">// 大盘1 中盘2 小盘3</span>
+      <span class="pl-s">"FSTYLE"</span>: <span class="pl-s">"01"</span><span class="pl-kos">,</span> <span class="pl-c">// 价值1 平衡2 成长3</span>
+      <span class="pl-s">"GZQK"</span>: <span class="pl-s">"3"</span><span class="pl-kos">,</span> <span class="pl-c">// 估值情况 低1 中2 高3</span>
+      <span class="pl-s">"YLQK"</span>: <span class="pl-s">"1"</span> <span class="pl-c">// 盈利 低1 中2 高3</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-s">"SubStyle"</span>: <span class="pl-kos">[</span> <span class="pl-c">// 重仓主题</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-s">"DLMC"</span>: <span class="pl-s">"科技"</span><span class="pl-kos">,</span> <span class="pl-c">// 主题</span>
+        <span class="pl-s">"CCBL"</span>: <span class="pl-s">"11.59"</span><span class="pl-kos">,</span> <span class="pl-c">// 经理占比 11.59%</span>
+        <span class="pl-s">"AVRBL"</span>: <span class="pl-s">"11.63"</span> <span class="pl-c">// 同类平均 11.63%</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">]</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金经理持仓特点</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMSNMangerPosChar</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">mGRID</code> 基金经理id</p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"FCODE"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span>
+    <span class="pl-s">"REPORTDATE"</span>: <span class="pl-s">"2022-03-31"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"GPCW"</span>: <span class="pl-c1">99.02</span><span class="pl-kos">,</span> <span class="pl-c">// 股票仓位-经理-99.02%</span>
+    <span class="pl-s">"SDJZD"</span>: <span class="pl-c1">37.61</span><span class="pl-kos">,</span> <span class="pl-c">// 前十大集中度-经理-37.61%</span>
+    <span class="pl-s">"DYHYZB"</span>: <span class="pl-c1">17.06</span><span class="pl-kos">,</span> <span class="pl-c">// 第一行业占比-经理-17.06%</span>
+    <span class="pl-s">"YCESL_3M"</span>: <span class="pl-c1">50</span><span class="pl-kos">,</span> <span class="pl-c">// 月超额胜率-经理-50.00%</span>
+    <span class="pl-s">"YCESTD_3M"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span>
+    <span class="pl-s">"ZCGCYD"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span>
+    <span class="pl-s">"HYJZD"</span>: <span class="pl-c1">15.1841</span><span class="pl-kos">,</span> <span class="pl-c">// 行业集中度-经理-15.1841%</span>
+    <span class="pl-s">"GPCWAVG"</span>: <span class="pl-c1">77.0225</span><span class="pl-kos">,</span> <span class="pl-c">// 股票仓位-同类平均-77.0225%</span>
+    <span class="pl-s">"SDJZDAVG"</span>: <span class="pl-c1">32.916</span><span class="pl-kos">,</span> <span class="pl-c">// 前十大集中度-同类平均-37.61%</span>
+    <span class="pl-s">"DYHYZBAVG"</span>: <span class="pl-c1">17.0735</span><span class="pl-kos">,</span> <span class="pl-c">// 第一行业占比-同类平均-17.06%</span>
+    <span class="pl-s">"YCESL_3MAVG"</span>: <span class="pl-c1">49.0312</span><span class="pl-kos">,</span> <span class="pl-c">// 月超额胜率-同类平均-49.0312%</span>
+    <span class="pl-s">"YCESTD_3MAVG"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span>
+    <span class="pl-s">"ZCGCYDAVG"</span>: <span class="pl-c1">null</span><span class="pl-kos">,</span>
+    <span class="pl-s">"HYJZDAVG"</span>: <span class="pl-c1">12.3577</span> <span class="pl-c">// 行业集中度-同类平均-15.1841%</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>获取基金经理持仓历史管理资金</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/fundMSNMangerProContr</code></p>
+<p><strong>参数</strong></p>
+<p><code class="notranslate">mGRID</code> 基金经理id</p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"Datas"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"FCODE"</span>: <span class="pl-s">"502056"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金代码</span>
+    <span class="pl-s">"SHORTNAME"</span>: <span class="pl-s">"广发中证医疗指数(LOF)A"</span><span class="pl-kos">,</span> <span class="pl-c">// 基金名</span>
+    <span class="pl-s">"RLEVEL_SZ"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"FSTYLE"</span>: <span class="pl-s">"02"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"RISKLEVEL"</span>: <span class="pl-s">"5"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"LEMPDATE"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span> <span class="pl-c">// 任期结束时间</span>
+    <span class="pl-s">"FEMPDATE"</span>: <span class="pl-s">"2015-10-12T16:00:00Z"</span><span class="pl-kos">,</span> <span class="pl-c">// 任期开始</span>
+    <span class="pl-s">"TOTALDAYS"</span>: <span class="pl-s">"2420"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"TLSC"</span>: <span class="pl-s">"495"</span><span class="pl-kos">,</span> <span class="pl-c">// 同类同期排名总数 495</span>
+    <span class="pl-s">"TLGROWTH"</span>: <span class="pl-s">"51.36"</span><span class="pl-kos">,</span> <span class="pl-c">// 同类同期平均 51.36%</span>
+    <span class="pl-s">"TLRANK"</span>: <span class="pl-s">"370"</span><span class="pl-kos">,</span> <span class="pl-c">// 同类同期排名 370</span>
+    <span class="pl-s">"PENAVGROWTH"</span>: <span class="pl-s">"12.4386"</span><span class="pl-kos">,</span> <span class="pl-c">// 任期回报 12.4386%</span>
+    <span class="pl-s">"FTYPE"</span>: <span class="pl-s">"指数型-股票"</span><span class="pl-kos">,</span> <span class="pl-c">// 类型</span>
+    <span class="pl-s">"ISSALES"</span>: <span class="pl-s">"1"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"ISSBDATE"</span>: <span class="pl-s">"2015-07-01 00:00:00"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"RGBEGIN"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"ISSEDATE"</span>: <span class="pl-s">"2015-07-15 15:00:00"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"RGEND"</span>: <span class="pl-s">"--"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"ISFNEW"</span>: <span class="pl-s">"0"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"SYL_3Y"</span>: <span class="pl-s">"-13.06"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"RANKQ"</span>: <span class="pl-s">"1053"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"QSC"</span>: <span class="pl-s">"1891"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"SYL_1N"</span>: <span class="pl-s">"-43.42"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"RANKY"</span>: <span class="pl-s">"1316"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"YSC"</span>: <span class="pl-s">"1324"</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<h2>股票</h2>
+<h3>股票趋势</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">stockTrends2</code></p>
+<p><strong>参数</strong><br>
+<code class="notranslate">type</code> 类型（暂定）</p>
+<ul>
+<li>其他：<code class="notranslate">0</code></li>
+<li>上证：<code class="notranslate">1</code></li>
+<li>未知: <code class="notranslate">2</code></li>
+<li>港股：<code class="notranslate">116</code></li>
+<li>美股：<code class="notranslate">105</code></li>
+<li>英股：<code class="notranslate">155</code></li>
+</ul>
+<p><code class="notranslate">code</code> 股票代码</p>
+<p><code class="notranslate">ndays</code> 天数 [1,5]</p>
+<ul>
+<li>分时: <code class="notranslate">1</code></li>
+<li>五日: <code class="notranslate">5</code></li>
+</ul>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"code"</span>: <span class="pl-s">"399001"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"market"</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+  <span class="pl-s">"type"</span>: <span class="pl-c1">5</span><span class="pl-kos">,</span>
+  <span class="pl-s">"status"</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+  <span class="pl-s">"name"</span>: <span class="pl-s">"深证成指"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"decimal"</span>: <span class="pl-c1">2</span><span class="pl-kos">,</span>
+  <span class="pl-s">"preSettlement"</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+  <span class="pl-s">"preClose"</span>: <span class="pl-c1">11967.74</span><span class="pl-kos">,</span>
+  <span class="pl-s">"beticks"</span>: <span class="pl-s">"33300|34200|54000|34200|41400|46800|54000"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"trendsTotal"</span>: <span class="pl-c1">241</span><span class="pl-kos">,</span>
+  <span class="pl-s">"time"</span>: <span class="pl-c1">1681112058</span><span class="pl-kos">,</span>
+  <span class="pl-s">"kind"</span>: <span class="pl-c1">2</span><span class="pl-kos">,</span>
+  <span class="pl-s">"prePrice"</span>: <span class="pl-c1">11967.74</span><span class="pl-kos">,</span>
+  <span class="pl-s">"trends"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+    <span class="pl-s">"2023-04-10 09:30,11987.68,5315278,11974.320"</span><span class="pl-kos">,</span> <span class="pl-c">// 时间,价格,成交量,成交额</span>
+  <span class="pl-kos">}</span><span class="pl-kos">]</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>股票k线</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/stockKline</code></p>
+<p><strong>参数</strong><br>
+<code class="notranslate">type</code> 类型（暂定）</p>
+<ul>
+<li>其他：<code class="notranslate">0</code></li>
+<li>上证：<code class="notranslate">1</code></li>
+<li>未知: <code class="notranslate">2</code></li>
+<li>港股：<code class="notranslate">116</code></li>
+<li>美股：<code class="notranslate">105</code></li>
+<li>英股：<code class="notranslate">155</code><br>
+<code class="notranslate">code</code> 股票代码</li>
+</ul>
+<p><code class="notranslate">klt</code> k线类型</p>
+<ul>
+<li>日k: <code class="notranslate">101</code></li>
+<li>周k: <code class="notranslate">102</code></li>
+<li>月k: <code class="notranslate">103</code></li>
+<li>1分钟: <code class="notranslate">1</code></li>
+<li>5分钟: <code class="notranslate">5</code></li>
+<li>15分钟: <code class="notranslate">15</code></li>
+<li>30分钟: <code class="notranslate">30</code></li>
+<li>60分钟: <code class="notranslate">60</code></li>
+</ul>
+<p><code class="notranslate">lmt</code> 每页数量</p>
+<p><code class="notranslate">fqt</code> 页数</p>
+<p><code class="notranslate">end</code> 结束时间，例：<code class="notranslate">20230410</code></p>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"code"</span>: <span class="pl-s">"399001"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"market"</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+  <span class="pl-s">"name"</span>: <span class="pl-s">"深证成指"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"decimal"</span>: <span class="pl-c1">2</span><span class="pl-kos">,</span>
+  <span class="pl-s">"dktotal"</span>: <span class="pl-c1">7845</span><span class="pl-kos">,</span>
+  <span class="pl-s">"klines"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+    <span class="pl-s">"2023-03-13 10:30,11405.14,11428.89,11511.12,11396.61,166613932,210718299984.00"</span><span class="pl-kos">,</span> <span class="pl-c">// 时间,开盘,最高,最低,收盘,成交量,成交额</span>
+  <span class="pl-kos">}</span><span class="pl-kos">]</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>股票交易明细</h3>
+<p><strong>路由</strong></p>
+<p><code class="notranslate">/stockDetails</code></p>
+<p><strong>参数</strong><br>
+<code class="notranslate">type</code> 类型（暂定）</p>
+<ul>
+<li>其他：<code class="notranslate">0</code></li>
+<li>上证：<code class="notranslate">1</code></li>
+<li>未知: <code class="notranslate">2</code></li>
+<li>港股：<code class="notranslate">116</code></li>
+<li>美股：<code class="notranslate">105</code></li>
+<li>英股：<code class="notranslate">155</code><br>
+<code class="notranslate">code</code> 股票代码</li>
+</ul>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"code"</span>: <span class="pl-s">"300750"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"market"</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+  <span class="pl-s">"decimal"</span>: <span class="pl-c1">2</span><span class="pl-kos">,</span>
+  <span class="pl-s">"prePrice"</span>: <span class="pl-c1">390.51</span><span class="pl-kos">,</span>
+  <span class="pl-s">"details"</span>: <span class="pl-kos">[</span><span class="pl-kos">{</span>
+    <span class="pl-s">"14:56:42,402.08,16,15,2"</span><span class="pl-kos">,</span> <span class="pl-c">// 时间,价格,成交量,成交额</span>
+  <span class="pl-kos">}</span><span class="pl-kos">]</span>
+<span class="pl-kos">}</span></pre></div>
+<h3>股票详情</h3>
+<p><strong>路由</strong><br>
+<code class="notranslate">/stockGet</code></p>
+<p><strong>参数</strong><br>
+<code class="notranslate">type</code> 类型（暂定）</p>
+<ul>
+<li>其他：<code class="notranslate">0</code></li>
+<li>上证：<code class="notranslate">1</code></li>
+<li>未知: <code class="notranslate">2</code></li>
+<li>港股：<code class="notranslate">116</code></li>
+<li>美股：<code class="notranslate">105</code></li>
+<li>英股：<code class="notranslate">155</code><br>
+<code class="notranslate">code</code> 股票代码</li>
+</ul>
+<p><strong>结果</strong></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-s">"f57"</span>: <span class="pl-s">"300750"</span><span class="pl-kos">,</span> <span class="pl-c">// 股票代码</span>
+  <span class="pl-s">"f58"</span>: <span class="pl-s">"宁德时代"</span><span class="pl-kos">,</span> <span class="pl-c">// 股票名</span>
+  <span class="pl-s">"f127"</span>: <span class="pl-s">"电池"</span><span class="pl-kos">,</span> <span class="pl-c">// 行业</span>
+  <span class="pl-s">"f43"</span>: <span class="pl-c1">40201</span><span class="pl-kos">,</span> <span class="pl-c">// 成交价</span>
+  <span class="pl-s">"f44"</span>: <span class="pl-c1">40211</span><span class="pl-kos">,</span> <span class="pl-c">// 最高价</span>
+  <span class="pl-s">"f45"</span>: <span class="pl-c1">40191</span><span class="pl-kos">,</span> <span class="pl-c">// 最低价</span>
+  <span class="pl-s">"f169"</span>: <span class="pl-c1">1150</span>  <span class="pl-c">// 涨跌额</span>
+  <span class="pl-s">"f170"</span>: <span class="pl-c1">294</span><span class="pl-kos">,</span> <span class="pl-c">// 涨跌幅</span>
+  <span class="pl-s">"f168"</span>: <span class="pl-c1">80</span><span class="pl-kos">,</span> <span class="pl-c">// 换手</span>
+  <span class="pl-s">"f47"</span>: <span class="pl-c1">172379</span><span class="pl-kos">,</span> <span class="pl-c">// 总手</span>
+  <span class="pl-s">"f48"</span>: <span class="pl-c1">6844475287.47</span><span class="pl-kos">,</span> <span class="pl-c">// 总金额</span>
+  <span class="pl-s">"f116"</span>: <span class="pl-c1">981915263793.24</span><span class="pl-kos">,</span> <span class="pl-c">// 总市值</span>
+  <span class="pl-s">"f117"</span>: <span class="pl-c1">867212540040.63</span><span class="pl-kos">,</span> <span class="pl-c">// 流通市值</span>
+  <span class="pl-s">"f162"</span>: <span class="pl-c1">3195</span><span class="pl-kos">,</span> <span class="pl-c">// 市盈率</span>
+  <span class="pl-s">"f135"</span>: <span class="pl-c1">4381590720</span><span class="pl-kos">,</span> <span class="pl-c">// 主力流入</span>
+  <span class="pl-s">"f136"</span>: <span class="pl-c1">3941491264</span><span class="pl-kos">,</span> <span class="pl-c">// 主力流出</span>
+  <span class="pl-s">"f137"</span>: <span class="pl-c1">440099456</span><span class="pl-kos">,</span> <span class="pl-c">// 主力净流向</span>
+  <span class="pl-s">"f138"</span>: <span class="pl-c1">4381590720</span><span class="pl-kos">,</span> <span class="pl-c">// 超大单流入</span>
+  <span class="pl-s">"f139"</span>: <span class="pl-c1">4381590720</span><span class="pl-kos">,</span> <span class="pl-c">// 超大单流出</span>
+  <span class="pl-s">"f140"</span>: <span class="pl-c1">4381590720</span><span class="pl-kos">,</span> <span class="pl-c">// 超大单流向</span>
+  <span class="pl-s">"f141"</span>: <span class="pl-c1">4381590720</span><span class="pl-kos">,</span> <span class="pl-c">// 大单流入</span>
+  <span class="pl-s">"f142"</span>: <span class="pl-c1">4381590720</span><span class="pl-kos">,</span> <span class="pl-c">// 大单流出</span>
+  <span class="pl-s">"f143"</span>: <span class="pl-c1">-</span><span class="pl-c1">4381590720</span><span class="pl-kos">,</span> <span class="pl-c">// 大单流向</span>
+  <span class="pl-s">"f144"</span>: <span class="pl-c1">4381590720</span><span class="pl-kos">,</span> <span class="pl-c">// 中单流入</span>
+  <span class="pl-s">"f145"</span>: <span class="pl-c1">4381590720</span><span class="pl-kos">,</span> <span class="pl-c">// 中单流出</span>
+  <span class="pl-s">"f146"</span>: <span class="pl-c1">-</span><span class="pl-c1">4381590720</span><span class="pl-kos">,</span> <span class="pl-c">// 中单流向</span>
+  <span class="pl-s">"f147"</span>: <span class="pl-c1">624492672</span><span class="pl-kos">,</span> <span class="pl-c">// 小单流入</span>
+  <span class="pl-s">"f148"</span>: <span class="pl-c1">624492672</span><span class="pl-kos">,</span> <span class="pl-c">// 小单流出</span>
+  <span class="pl-s">"f149"</span>: <span class="pl-c1">-</span><span class="pl-c1">624492672</span><span class="pl-kos">,</span> <span class="pl-c">// 小单流向</span>
+  <span class="pl-s">"f178"</span>: <span class="pl-s">"[{\"date\":\"2023-04-07\",\"mainNetAmt\":401068560.0},{\"date\":\"2023-04-06\",\"mainNetAmt\":-290600944.0},{\"date\":\"2023-04-04\",\"mainNetAmt\":-1146420016.0},{\"date\":\"2023-04-03\",\"mainNetAmt\":-1051367888.0},{\"date\":\"2023-03-31\",\"mainNetAmt\":163445664.0}]"</span><span class="pl-kos">,</span> <span class="pl-c">// 近5日主力增减持仓</span>
+<span class="pl-kos">}</span></pre></div></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
@@ -98,7 +2935,7 @@ if(""!=""){
 </script></div>
 </body>
 <script>
-var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
 var utterancesLoad=0;
 
 let themeSettings={
@@ -171,7 +3008,70 @@ function iFrameLoading(){
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
 
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
 
 </script>
 
